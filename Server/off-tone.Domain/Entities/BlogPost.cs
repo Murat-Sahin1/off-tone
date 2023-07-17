@@ -19,6 +19,7 @@ namespace off_tone.Domain.Entities
 
         //--------------------------------
         //Relationships
+        public Blog Blog { get; set; }
         public ICollection<Review> Reviews { get; set; }
         public ICollection<Tag> Tags { get; set; }
     }

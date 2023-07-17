@@ -152,11 +152,13 @@ namespace off_tone.Persistence.Migrations
 
             modelBuilder.Entity("off_tone.Domain.Entities.BlogPost", b =>
                 {
-                    b.HasOne("off_tone.Domain.Entities.Blog", null)
+                    b.HasOne("off_tone.Domain.Entities.Blog", "Blog")
                         .WithMany("BlogPosts")
                         .HasForeignKey("BlogId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("Blog");
                 });
 
             modelBuilder.Entity("off_tone.Domain.Entities.Review", b =>
