@@ -1,6 +1,6 @@
 ﻿using System;
 using Microsoft.EntityFrameworkCore.Migrations;
-using MySql.EntityFrameworkCore.Metadata;
+using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 #nullable disable
 
@@ -12,51 +12,46 @@ namespace off_tone.Persistence.Migrations
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.AlterDatabase()
-                .Annotation("MySQL:Charset", "utf8mb4");
-
             migrationBuilder.CreateTable(
                 name: "Blogs",
                 columns: table => new
                 {
-                    BlogId = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("MySQL:ValueGenerationStrategy", MySQLValueGenerationStrategy.IdentityColumn),
-                    BlogName = table.Column<string>(type: "longtext", nullable: true),
-                    BlogDescription = table.Column<string>(type: "longtext", nullable: true),
-                    SubName = table.Column<string>(type: "longtext", nullable: true),
-                    About = table.Column<string>(type: "longtext", nullable: true),
-                    CreationDate = table.Column<DateTime>(type: "datetime(6)", nullable: false),
-                    UpdatedDate = table.Column<DateTime>(type: "datetime(6)", nullable: false)
+                    BlogId = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    BlogName = table.Column<string>(type: "text", nullable: true),
+                    BlogDescription = table.Column<string>(type: "text", nullable: true),
+                    SubName = table.Column<string>(type: "text", nullable: true),
+                    About = table.Column<string>(type: "text", nullable: true),
+                    CreationDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    UpdatedDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Blogs", x => x.BlogId);
-                })
-                .Annotation("MySQL:Charset", "utf8mb4");
+                });
 
             migrationBuilder.CreateTable(
                 name: "Tags",
                 columns: table => new
                 {
-                    TagId = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("MySQL:ValueGenerationStrategy", MySQLValueGenerationStrategy.IdentityColumn),
-                    Name = table.Column<string>(type: "longtext", nullable: true)
+                    TagId = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    Name = table.Column<string>(type: "text", nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Tags", x => x.TagId);
-                })
-                .Annotation("MySQL:Charset", "utf8mb4");
+                });
 
             migrationBuilder.CreateTable(
                 name: "BlogPosts",
                 columns: table => new
                 {
-                    BlogPostId = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("MySQL:ValueGenerationStrategy", MySQLValueGenerationStrategy.IdentityColumn),
-                    BlogPostTitle = table.Column<string>(type: "longtext", nullable: true),
-                    BlogPostText = table.Column<string>(type: "longtext", nullable: true),
-                    BlogId = table.Column<int>(type: "int", nullable: false)
+                    BlogPostId = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    BlogPostTitle = table.Column<string>(type: "text", nullable: true),
+                    BlogPostText = table.Column<string>(type: "text", nullable: true),
+                    BlogId = table.Column<int>(type: "integer", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -67,15 +62,14 @@ namespace off_tone.Persistence.Migrations
                         principalTable: "Blogs",
                         principalColumn: "BlogId",
                         onDelete: ReferentialAction.Cascade);
-                })
-                .Annotation("MySQL:Charset", "utf8mb4");
+                });
 
             migrationBuilder.CreateTable(
                 name: "BlogPostTag",
                 columns: table => new
                 {
-                    PostsBlogPostId = table.Column<int>(type: "int", nullable: false),
-                    TagsTagId = table.Column<int>(type: "int", nullable: false)
+                    PostsBlogPostId = table.Column<int>(type: "integer", nullable: false),
+                    TagsTagId = table.Column<int>(type: "integer", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -92,19 +86,18 @@ namespace off_tone.Persistence.Migrations
                         principalTable: "Tags",
                         principalColumn: "TagId",
                         onDelete: ReferentialAction.Cascade);
-                })
-                .Annotation("MySQL:Charset", "utf8mb4");
+                });
 
             migrationBuilder.CreateTable(
                 name: "Review",
                 columns: table => new
                 {
-                    ReviewId = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("MySQL:ValueGenerationStrategy", MySQLValueGenerationStrategy.IdentityColumn),
-                    VoterName = table.Column<string>(type: "longtext", nullable: true),
-                    Stars = table.Column<int>(type: "int", nullable: false),
-                    Comment = table.Column<string>(type: "longtext", nullable: true),
-                    BlogPostId = table.Column<int>(type: "int", nullable: false)
+                    ReviewId = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    VoterName = table.Column<string>(type: "text", nullable: true),
+                    Stars = table.Column<int>(type: "integer", nullable: false),
+                    Comment = table.Column<string>(type: "text", nullable: true),
+                    BlogPostId = table.Column<int>(type: "integer", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -115,8 +108,7 @@ namespace off_tone.Persistence.Migrations
                         principalTable: "BlogPosts",
                         principalColumn: "BlogPostId",
                         onDelete: ReferentialAction.Cascade);
-                })
-                .Annotation("MySQL:Charset", "utf8mb4");
+                });
 
             migrationBuilder.CreateIndex(
                 name: "IX_BlogPosts_BlogId",

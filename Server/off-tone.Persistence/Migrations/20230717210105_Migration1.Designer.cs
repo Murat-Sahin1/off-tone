@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
+using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using off_tone.Persistence.Contexts;
 
 #nullable disable
@@ -11,7 +12,7 @@ using off_tone.Persistence.Contexts;
 namespace off_tone.Persistence.Migrations
 {
     [DbContext(typeof(BlogDbContext))]
-    [Migration("20230712231614_Migration1")]
+    [Migration("20230717210105_Migration1")]
     partial class Migration1
     {
         /// <inheritdoc />
@@ -20,15 +21,17 @@ namespace off_tone.Persistence.Migrations
 #pragma warning disable 612, 618
             modelBuilder
                 .HasAnnotation("ProductVersion", "7.0.8")
-                .HasAnnotation("Relational:MaxIdentifierLength", 64);
+                .HasAnnotation("Relational:MaxIdentifierLength", 63);
+
+            NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
 
             modelBuilder.Entity("BlogPostTag", b =>
                 {
                     b.Property<int>("PostsBlogPostId")
-                        .HasColumnType("int");
+                        .HasColumnType("integer");
 
                     b.Property<int>("TagsTagId")
-                        .HasColumnType("int");
+                        .HasColumnType("integer");
 
                     b.HasKey("PostsBlogPostId", "TagsTagId");
 
@@ -41,25 +44,27 @@ namespace off_tone.Persistence.Migrations
                 {
                     b.Property<int>("BlogId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("BlogId"));
 
                     b.Property<string>("About")
-                        .HasColumnType("longtext");
+                        .HasColumnType("text");
 
                     b.Property<string>("BlogDescription")
-                        .HasColumnType("longtext");
+                        .HasColumnType("text");
 
                     b.Property<string>("BlogName")
-                        .HasColumnType("longtext");
+                        .HasColumnType("text");
 
                     b.Property<DateTime>("CreationDate")
-                        .HasColumnType("datetime(6)");
+                        .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("SubName")
-                        .HasColumnType("longtext");
+                        .HasColumnType("text");
 
                     b.Property<DateTime>("UpdatedDate")
-                        .HasColumnType("datetime(6)");
+                        .HasColumnType("timestamp with time zone");
 
                     b.HasKey("BlogId");
 
@@ -70,16 +75,18 @@ namespace off_tone.Persistence.Migrations
                 {
                     b.Property<int>("BlogPostId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("BlogPostId"));
 
                     b.Property<int>("BlogId")
-                        .HasColumnType("int");
+                        .HasColumnType("integer");
 
                     b.Property<string>("BlogPostText")
-                        .HasColumnType("longtext");
+                        .HasColumnType("text");
 
                     b.Property<string>("BlogPostTitle")
-                        .HasColumnType("longtext");
+                        .HasColumnType("text");
 
                     b.HasKey("BlogPostId");
 
@@ -92,19 +99,21 @@ namespace off_tone.Persistence.Migrations
                 {
                     b.Property<int>("ReviewId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("ReviewId"));
 
                     b.Property<int>("BlogPostId")
-                        .HasColumnType("int");
+                        .HasColumnType("integer");
 
                     b.Property<string>("Comment")
-                        .HasColumnType("longtext");
+                        .HasColumnType("text");
 
                     b.Property<int>("Stars")
-                        .HasColumnType("int");
+                        .HasColumnType("integer");
 
                     b.Property<string>("VoterName")
-                        .HasColumnType("longtext");
+                        .HasColumnType("text");
 
                     b.HasKey("ReviewId");
 
@@ -117,10 +126,12 @@ namespace off_tone.Persistence.Migrations
                 {
                     b.Property<int>("TagId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("TagId"));
 
                     b.Property<string>("Name")
-                        .HasColumnType("longtext");
+                        .HasColumnType("text");
 
                     b.HasKey("TagId");
 
@@ -144,13 +155,11 @@ namespace off_tone.Persistence.Migrations
 
             modelBuilder.Entity("off_tone.Domain.Entities.BlogPost", b =>
                 {
-                    b.HasOne("off_tone.Domain.Entities.Blog", "Blog")
+                    b.HasOne("off_tone.Domain.Entities.Blog", null)
                         .WithMany("BlogPosts")
                         .HasForeignKey("BlogId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.Navigation("Blog");
                 });
 
             modelBuilder.Entity("off_tone.Domain.Entities.Review", b =>

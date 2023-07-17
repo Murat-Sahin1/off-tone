@@ -20,7 +20,8 @@ namespace off_tone.Persistence.Repositories.Common
 
         public bool AnyElements()
         {
-            throw new NotImplementedException();
+            bool isSeeded = Table.Any();
+            return isSeeded;
         }
 
         public bool EnsureCreation()
@@ -28,6 +29,5 @@ namespace off_tone.Persistence.Repositories.Common
             bool isCreated = _blogDbContext.Database.EnsureCreated();
             return isCreated;
         }
-
     }
 }

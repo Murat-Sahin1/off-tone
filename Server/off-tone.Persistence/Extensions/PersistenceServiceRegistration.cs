@@ -1,23 +1,27 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Runtime.CompilerServices;
-using System.Text;
 using Microsoft.Extensions.Configuration;
-using System.Threading.Tasks;
 using off_tone.Persistence.Contexts;
+using off_tone.Application.Interfaces.Repositories.BlogPostRepos;
+using off_tone.Persistence.Repositories.BlogPostRepos;
+using off_tone.Application.Interfaces.Repositories.BlogRepos;
+using off_tone.Persistence.Repositories.BlogRepos;
 
 namespace off_tone.Persistence.Extensions
 {
     public static class PersistenceServiceRegistration
     {
         public static IServiceCollection RegisterPersistenceServices(this IServiceCollection services, IConfiguration config)
-        {
-            var connection = config.GetConnectionString("DefaultConnection");
+        {         
 
-            services.AddDbContext<BlogDbContext>(options => options.UseMySQL(config.GetConnectionString("DefaultConnection")));
+            services.AddDbContext<BlogDbContext>(options => options.UseNpgsql(config.GetConnectionString("PostgresConnection")));
+
+            services.AddScoped<IBlogPostReadRepository, BlogPostReadRepository>();
+            services.AddScoped<IBlogPostWriteRepository, BlogPostWriteRepository>();
+
+            services.AddScoped<IBlogReadRepository, BlogReadRepository>();
+            services.AddScoped<IBlogWriteRepository, BlogWriteRepository>();
+
             return services;
         }
     }

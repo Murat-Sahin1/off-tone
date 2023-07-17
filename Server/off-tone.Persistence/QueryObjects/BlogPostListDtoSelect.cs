@@ -15,7 +15,6 @@ namespace off_tone.Persistence.QueryObjects
             return blogPosts.Select(blogPost => new BlogPostListDto
             {
                 BlogPostId = blogPost.BlogPostId,
-                BlogName = blogPost.Blog.BlogName,
                 BlogPostTitle = blogPost.BlogPostTitle,
                 BlogPostText = blogPost.BlogPostText,
                 TagStrings = blogPost.Tags.Select(t => t.Name).ToArray(),

@@ -15,7 +15,6 @@ namespace off_tone.Persistence.Repositories.BlogPostRepos
             return Table.AsQueryable().Select(bp => new BlogPostListDto
             {
                 BlogPostId = bp.BlogPostId,
-                BlogName = bp.Blog.BlogName,
                 BlogPostTitle = bp.BlogPostTitle,
                 BlogPostText = bp.BlogPostText,
                 TagStrings = bp.Tags.Select(t => t.Name).ToArray(),

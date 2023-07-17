@@ -18,6 +18,12 @@ namespace off_tone.Persistence.Repositories.Common
             await Table.AddRangeAsync(list);
             return true;
         }
+
+        public async Task<bool> SaveAsync()
+        {
+            await _blogDbContext.SaveChangesAsync();
+            return true;
+        }
     }
 }
 

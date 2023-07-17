@@ -10,5 +10,6 @@ namespace off_tone.Application.Interfaces.Repositories.Common
     public interface IWriteRepository<T> : IRepository<T> where T : class
     {
         public Task<bool> InsertRangeAsync(List<T> list);
+        public Task<bool> SaveAsync();
     }
 }
