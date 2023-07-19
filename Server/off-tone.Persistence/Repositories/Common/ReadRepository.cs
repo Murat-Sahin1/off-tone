@@ -13,5 +13,6 @@ namespace off_tone.Persistence.Repositories.Common
     {
         public ReadRepository(BlogDbContext blogDbContext) : base(blogDbContext) {}
         public abstract IQueryable<TDto> GetAll();
+        public abstract IQueryable<TDto> GetById(int id);
     }
 }

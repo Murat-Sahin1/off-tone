@@ -14,5 +14,10 @@ namespace off_tone.Persistence.Repositories.BlogRepos
         {
             throw new NotImplementedException();
         }
+
+        public override IQueryable<BlogListDto> GetById(int id)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

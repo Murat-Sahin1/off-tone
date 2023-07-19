@@ -10,5 +10,6 @@ namespace off_tone.Application.Interfaces.Repositories.Common
     public interface IReadRepository<T, TDto> : IRepository<T> where T : class
     {
         public IQueryable<TDto> GetAll();
+        public IQueryable<TDto> GetById(int id);
     }
 }

@@ -22,5 +22,17 @@ namespace off_tone.Persistence.Repositories.BlogPostRepos
                 // TagStrings = bp.Tags.Select(t => t.Name).ToArray(),
             });
         }
+
+        public override IQueryable<BlogPostListDto> GetById(int id)
+        {
+            return Table.AsNoTracking().AsQueryable().Where(bp => bp.BlogPostId == id).Select(bp => new BlogPostListDto
+            {
+                BlogPostId = bp.BlogPostId,
+                BlogPostTitle = bp.BlogPostTitle,
+                BlogPostText = bp.BlogPostText,
+                BlogName = bp.Blog.BlogName,
+                // TagStrings = bp.Tags.Select(t => t.Name).ToArray(),
+            });
+        }
     }
 }

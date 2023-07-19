@@ -9,14 +9,23 @@ namespace off_tone.WebApi.Controllers
     public class BlogPostsController : ControllerBase
     {
         private readonly IBlogPostReadRepository _blogPostsReadRepository;
-        public BlogPostsController(IBlogPostReadRepository blogPostReadRepository)
+        private readonly IBlogPostWriteRepository _blogPostsWriteRepository;
+        public BlogPostsController(IBlogPostReadRepository blogPostReadRepository, IBlogPostWriteRepository blogPostWriteRepository)
         {
-            _blogPostsReadRepository =  blogPostReadRepository;
+            _blogPostsReadRepository = blogPostReadRepository;
+            _blogPostsWriteRepository = blogPostWriteRepository;
         }
+
         [HttpGet]
-        public List<BlogPostListDto> GetBlogPosts()
+        public IQueryable<BlogPostListDto> GetListedBlogPosts()
         {
-            return _blogPostsReadRepository.GetAll().ToList();
+            return _blogPostsReadRepository.GetAll();
+        }
+
+        [HttpGet("{id}")]
+        public IQueryable<BlogPostListDto> GetListedBlogPost(int id)
+        {
+            return _blogPostsReadRepository.GetById(id);
         }
     }
 }

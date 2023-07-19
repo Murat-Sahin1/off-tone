@@ -9,12 +9,10 @@ namespace off_tone.Persistence.Seeds
     {
         public static async Task<bool> seedBlogPosts(IBlogPostWriteRepository blogPostWriteRepository, IBlogWriteRepository blogWriteRepository)
         {
-            if (blogPostWriteRepository.EnsureCreation())
+
+            if (blogPostWriteRepository.AnyElements())
             {
-                if (blogPostWriteRepository.AnyElements())
-                {
-                    return true;
-                }
+                return true;
             }
 
             var blogs = new List<Blog>();

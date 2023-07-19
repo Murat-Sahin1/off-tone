@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.ChangeTracking;
 using off_tone.Application.Interfaces.Repositories.Common;
 using off_tone.Persistence.Contexts;
 using System;
@@ -13,6 +14,31 @@ namespace off_tone.Persistence.Repositories.Common
     {
         public WriteRepository(BlogDbContext blogDbContext) : base(blogDbContext) {}
 
+        public async Task<bool> AddAsync(T entity)
+        {
+            EntityEntry<T> entityEntry = await Table.AddAsync(entity);
+            return entityEntry.State == EntityState.Added;
+        }
+
+        public bool Remove(T entity)
+        {
+            EntityEntry<T> entityEntry = Table.Remove(entity);
+            return entityEntry.State == EntityState.Deleted;
+        }
+
+        public async Task<bool> RemoveById(int id)
+        {
+            T entity = await Table.FindAsync(id);
+            EntityEntry<T> entityEntry = Table.Remove(entity);
+            return entityEntry.State == EntityState.Deleted;
+        }
+
+        public bool Update(T entity)
+        {
+            EntityEntry<T> entityEntry = Table.Update(entity);
+            return entityEntry.State == EntityState.Modified;
+        }
+
         public async Task<bool> InsertRangeAsync(List<T> list)
         {
             await Table.AddRangeAsync(list);
@@ -26,4 +52,3 @@ namespace off_tone.Persistence.Repositories.Common
         }
     }
 }
-
