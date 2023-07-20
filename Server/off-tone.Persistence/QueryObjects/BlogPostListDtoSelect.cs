@@ -1,10 +1,10 @@
 ﻿using off_tone.Domain.Entities;
-using off_tone.Application.Dtos;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using off_tone.Application.Dtos.BlogPostDtos;
 
 namespace off_tone.Persistence.QueryObjects
 {

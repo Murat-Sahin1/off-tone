@@ -1,6 +1,8 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using off_tone.Application.Dtos;
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Mvc;
+using off_tone.Application.Dtos.BlogPostDtos;
 using off_tone.Application.Interfaces.Repositories.BlogPostRepos;
+using off_tone.Domain.Entities;
 
 namespace off_tone.WebApi.Controllers
 {
@@ -10,10 +12,12 @@ namespace off_tone.WebApi.Controllers
     {
         private readonly IBlogPostReadRepository _blogPostsReadRepository;
         private readonly IBlogPostWriteRepository _blogPostsWriteRepository;
-        public BlogPostsController(IBlogPostReadRepository blogPostReadRepository, IBlogPostWriteRepository blogPostWriteRepository)
+        private readonly IMapper _mapper;
+        public BlogPostsController(IBlogPostReadRepository blogPostReadRepository, IBlogPostWriteRepository blogPostWriteRepository, IMapper mapper)
         {
             _blogPostsReadRepository = blogPostReadRepository;
             _blogPostsWriteRepository = blogPostWriteRepository;
+            _mapper = mapper;
         }
 
         [HttpGet]
@@ -26,6 +30,14 @@ namespace off_tone.WebApi.Controllers
         public IQueryable<BlogPostListDto> GetListedBlogPost(int id)
         {
             return _blogPostsReadRepository.GetById(id);
+        }
+
+        [HttpPost("add")]
+        public async Task<bool> AddBlogPostAsync(BlogPostCreateDto blogPostCreateDto)
+        {
+            var blogPost = _mapper.Map<BlogPost>(blogPostCreateDto);
+            await _blogPostsWriteRepository.AddAsync(blogPost);
+            return await _blogPostsWriteRepository.SaveAsync();
         }
     }
 }

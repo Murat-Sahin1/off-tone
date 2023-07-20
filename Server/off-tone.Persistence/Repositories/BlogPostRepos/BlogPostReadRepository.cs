@@ -1,9 +1,9 @@
 ﻿using off_tone.Application.Interfaces.Repositories.BlogPostRepos;
 using off_tone.Domain.Entities;
 using off_tone.Persistence.Contexts;
-using off_tone.Application.Dtos;
 using off_tone.Persistence.Repositories.Common;
 using Microsoft.EntityFrameworkCore;
+using off_tone.Application.Dtos.BlogPostDtos;
 
 namespace off_tone.Persistence.Repositories.BlogPostRepos
 {

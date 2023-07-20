@@ -1,4 +1,4 @@
-﻿namespace off_tone.Application.Dtos
+﻿namespace off_tone.Application.Dtos.BlogPostDtos
 {
     public class BlogPostListDto
     {

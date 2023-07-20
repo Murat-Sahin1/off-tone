@@ -22,7 +22,7 @@ namespace off_tone.Persistence.Contexts
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
-
+            
         }
     }
 }
