@@ -12,7 +12,11 @@ namespace off_tone.Persistence.Repositories.Common
     public abstract class ReadRepository<T, TDto> : Repository<T>, IReadRepository<T, TDto> where T : class
     {
         public ReadRepository(BlogDbContext blogDbContext) : base(blogDbContext) {}
-        public abstract IQueryable<TDto> GetAll();
-        public abstract IQueryable<TDto> GetById(int id);
+        public abstract IQueryable<TDto> GetAllMappedToDto();
+        public abstract IQueryable<TDto> GetByIdMappedToDto(int id);
+        public async Task<T> GetByIdAsync(int id)
+        {
+            return await Table.FindAsync(id);
+        }
     }
 }

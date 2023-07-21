@@ -12,8 +12,8 @@ using off_tone.Persistence.Contexts;
 namespace off_tone.Persistence.Migrations
 {
     [DbContext(typeof(BlogDbContext))]
-    [Migration("20230717220659_Migration1")]
-    partial class Migration1
+    [Migration("20230721062208_Mig1")]
+    partial class Mig1
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -88,6 +88,12 @@ namespace off_tone.Persistence.Migrations
                     b.Property<string>("BlogPostTitle")
                         .HasColumnType("text");
 
+                    b.Property<DateTime>("CreationDate")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<DateTime>("UpdatedDate")
+                        .HasColumnType("timestamp with time zone");
+
                     b.HasKey("BlogPostId");
 
                     b.HasIndex("BlogId");
@@ -109,8 +115,14 @@ namespace off_tone.Persistence.Migrations
                     b.Property<string>("Comment")
                         .HasColumnType("text");
 
+                    b.Property<DateTime>("CreationDate")
+                        .HasColumnType("timestamp with time zone");
+
                     b.Property<int>("Stars")
                         .HasColumnType("integer");
+
+                    b.Property<DateTime>("UpdatedDate")
+                        .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("VoterName")
                         .HasColumnType("text");

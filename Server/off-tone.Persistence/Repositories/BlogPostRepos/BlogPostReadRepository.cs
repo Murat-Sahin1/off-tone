@@ -11,7 +11,7 @@ namespace off_tone.Persistence.Repositories.BlogPostRepos
     {
         public BlogPostReadRepository(BlogDbContext blogDbContext) : base(blogDbContext) { }
 
-        public override IQueryable<BlogPostListDto> GetAll()
+        public override IQueryable<BlogPostListDto> GetAllMappedToDto()
         {
             return Table.AsNoTracking().AsQueryable().Select(bp => new BlogPostListDto
             {
@@ -23,9 +23,9 @@ namespace off_tone.Persistence.Repositories.BlogPostRepos
             });
         }
 
-        public override IQueryable<BlogPostListDto> GetById(int id)
+        public override IQueryable<BlogPostListDto> GetByIdMappedToDto(int id)
         {
-            return Table.AsNoTracking().AsQueryable().Where(bp => bp.BlogPostId == id).Select(bp => new BlogPostListDto
+            return Table.AsQueryable().Where(bp => bp.BlogPostId == id).Select(bp => new BlogPostListDto
             {
                 BlogPostId = bp.BlogPostId,
                 BlogPostTitle = bp.BlogPostTitle,

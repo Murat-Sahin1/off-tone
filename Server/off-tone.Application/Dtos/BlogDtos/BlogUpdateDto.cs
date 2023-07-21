@@ -1,8 +1,13 @@
-﻿namespace off_tone.Application.Dtos
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace off_tone.Application.Dtos.BlogDtos
 {
-    public class BlogListDto
+    public class BlogUpdateDto
     {
-        public int BlogId { get; set; }
         public string BlogName { get; set; }
         public string BlogDescription { get; set; }
         public string SubName { get; set; }

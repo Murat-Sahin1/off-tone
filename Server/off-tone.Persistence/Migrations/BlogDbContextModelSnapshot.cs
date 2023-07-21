@@ -85,6 +85,12 @@ namespace off_tone.Persistence.Migrations
                     b.Property<string>("BlogPostTitle")
                         .HasColumnType("text");
 
+                    b.Property<DateTime>("CreationDate")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<DateTime>("UpdatedDate")
+                        .HasColumnType("timestamp with time zone");
+
                     b.HasKey("BlogPostId");
 
                     b.HasIndex("BlogId");
@@ -106,8 +112,14 @@ namespace off_tone.Persistence.Migrations
                     b.Property<string>("Comment")
                         .HasColumnType("text");
 
+                    b.Property<DateTime>("CreationDate")
+                        .HasColumnType("timestamp with time zone");
+
                     b.Property<int>("Stars")
                         .HasColumnType("integer");
+
+                    b.Property<DateTime>("UpdatedDate")
+                        .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("VoterName")
                         .HasColumnType("text");

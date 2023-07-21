@@ -1,4 +1,4 @@
-﻿using off_tone.Application.Dtos;
+﻿using off_tone.Application.Dtos.BlogDtos;
 using off_tone.Application.Interfaces.Repositories.Common;
 using off_tone.Domain.Entities;
 using System;
