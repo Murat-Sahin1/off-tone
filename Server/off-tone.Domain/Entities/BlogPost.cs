@@ -1,4 +1,5 @@
-﻿using System;
+﻿using off_tone.Domain.Entities.Common;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -9,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace off_tone.Domain.Entities
 {
-    public class BlogPost
+    public class BlogPost : BaseEntity
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]

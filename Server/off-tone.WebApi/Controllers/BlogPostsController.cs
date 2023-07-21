@@ -21,15 +21,15 @@ namespace off_tone.WebApi.Controllers
         }
 
         [HttpGet]
-        public IQueryable<BlogPostListDto> GetListedBlogPosts()
+        public IQueryable<BlogPostListDto> GetAllMappedBlogPosts()
         {
-            return _blogPostsReadRepository.GetAll();
+            return _blogPostsReadRepository.GetAllMappedToDto();
         }
 
         [HttpGet("{id}")]
-        public IQueryable<BlogPostListDto> GetListedBlogPost(int id)
+        public IQueryable<BlogPostListDto> GetMappedBlogPost(int id)
         {
-            return _blogPostsReadRepository.GetById(id);
+            return _blogPostsReadRepository.GetByIdMappedToDto(id);
         }
 
         [HttpPost("add")]
@@ -38,6 +38,22 @@ namespace off_tone.WebApi.Controllers
             var blogPost = _mapper.Map<BlogPost>(blogPostCreateDto);
             await _blogPostsWriteRepository.AddAsync(blogPost);
             return await _blogPostsWriteRepository.SaveAsync();
+        }
+
+        [HttpPut("update/{id}")]
+        public async Task<bool> UpdateBlogPost(int id, BlogPostUpdateDto blogPostUpdateDto)
+        {
+            var blogPost = await _blogPostsReadRepository.GetByIdAsync(id);
+
+            if (blogPost.BlogPostId != id)
+            {
+                throw new Exception("Ids are not matching.");
+            }
+
+            _mapper.Map(blogPostUpdateDto, blogPost);
+            await _blogPostsWriteRepository.SaveAsync();
+
+            return true;
         }
     }
 }
