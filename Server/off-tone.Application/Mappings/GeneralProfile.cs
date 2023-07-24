@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using off_tone.Application.Dtos.BlogDtos;
 using off_tone.Application.Dtos.BlogPostDtos;
+using off_tone.Application.Dtos.TagDtos;
 using off_tone.Domain.Entities;
 using System;
 using System.Collections.Generic;
@@ -22,6 +23,9 @@ namespace off_tone.Application.Mappings
             // Blog ---------------------
             CreateMap<BlogCreateDto, Blog>();
             CreateMap<BlogUpdateDto, Blog>();
+
+            // Tag ----------------------
+            CreateMap<TagCreateDto, Tag>();
         }
     }
 }

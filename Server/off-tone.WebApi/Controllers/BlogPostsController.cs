@@ -35,6 +35,7 @@ namespace off_tone.WebApi.Controllers
         [HttpPost("add")]
         public async Task<bool> AddBlogPostAsync(BlogPostCreateDto blogPostCreateDto)
         {
+            // Implement a tag conroller and make a validation here if the given tag exists
             var blogPost = _mapper.Map<BlogPost>(blogPostCreateDto);
             await _blogPostsWriteRepository.AddAsync(blogPost);
             return await _blogPostsWriteRepository.SaveAsync();

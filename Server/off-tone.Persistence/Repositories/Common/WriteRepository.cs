@@ -14,7 +14,7 @@ namespace off_tone.Persistence.Repositories.Common
     {
         public WriteRepository(BlogDbContext blogDbContext) : base(blogDbContext) {}
 
-        public async Task<bool> AddAsync(T entity)
+        public virtual async Task<bool> AddAsync(T entity)
         {
             EntityEntry<T> entityEntry = await Table.AddAsync(entity);
             return entityEntry.State == EntityState.Added;

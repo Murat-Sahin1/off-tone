@@ -36,7 +36,7 @@ namespace off_tone.Persistence.Repositories.BlogRepos
                     BlogPostTitle = bp.BlogPostTitle,
                     BlogPostText = bp.BlogPostText,
                     BlogName = bp.Blog.BlogName,
-                    // TagStrings = bp.Tags.Select(t => t.Name).ToArray(),
+                    TagStrings = bp.Tags.Select(t => t.Name).ToArray(),
                 }),
             });
         }

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using off_tone.Application.Dtos.TagDtos;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -11,6 +12,6 @@ namespace off_tone.Application.Dtos.BlogPostDtos
         public string BlogId { get; set; }
         public string BlogPostTitle { get; set; }
         public string BlogPostText { get; set; }
-        // public string[] TagStrings { get; set; }
+        public List<TagCreateDto> Tags { get; set; }
     }
 }
