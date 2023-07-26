@@ -1,9 +1,4 @@
-﻿using off_tone.Domain.Entities;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using off_tone.Application.Dtos.BlogPostDtos;
 
 namespace off_tone.Application.Dtos.TagDtos
 {
@@ -11,6 +6,6 @@ namespace off_tone.Application.Dtos.TagDtos
     {
         public int TagId { get; set; }
         public string TagName { get; set; }
-        public ICollection<BlogPost> blogPosts { get; set; }
+        public ICollection<BlogPostListDto> blogPosts { get; set; }
     }
 }

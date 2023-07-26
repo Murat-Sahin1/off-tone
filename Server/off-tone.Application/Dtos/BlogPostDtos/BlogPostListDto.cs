@@ -3,6 +3,7 @@
     public class BlogPostListDto
     {
         public int BlogPostId { get; set; }
+        public int BlogId { get; set; }
         public string BlogName { get; set; }
         public string BlogPostTitle { get; set; }
         public string BlogPostText { get; set; }

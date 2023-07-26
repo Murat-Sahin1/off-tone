@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using off_tone.Application.Dtos.BlogPostDtos;
 using off_tone.Application.Dtos.TagDtos;
 using off_tone.Application.Interfaces.Repositories.Common;
 using off_tone.Application.Interfaces.Repositories.TagRepos;
@@ -34,7 +35,15 @@ namespace off_tone.Persistence.Repositories.TagRepos
             {
                 TagId = t.TagId,
                 TagName = t.Name,
-                blogPosts = t.Posts
+                blogPosts = t.Posts.Select(p => new BlogPostListDto
+                {
+                    BlogPostId = p.BlogPostId,
+                    BlogId = p.BlogId,
+                    BlogName = p.Blog.BlogName,
+                    BlogPostText = p.BlogPostText,
+                    BlogPostTitle = p.BlogPostTitle,
+                    TagStrings = p.Tags.Select(t => t.Name).ToArray(),
+                }).ToList(),
             });
         }
     }
