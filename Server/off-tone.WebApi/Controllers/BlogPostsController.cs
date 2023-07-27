@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using off_tone.Application.Dtos.BlogPostDtos;
 using off_tone.Application.Interfaces.Repositories.BlogPostRepos;
+using off_tone.Application.Interfaces.Repositories.TagRepos;
 using off_tone.Domain.Entities;
 
 namespace off_tone.WebApi.Controllers
@@ -12,11 +13,13 @@ namespace off_tone.WebApi.Controllers
     {
         private readonly IBlogPostReadRepository _blogPostsReadRepository;
         private readonly IBlogPostWriteRepository _blogPostsWriteRepository;
+        private readonly ITagReadRepository _tagReadRepository;
         private readonly IMapper _mapper;
-        public BlogPostsController(IBlogPostReadRepository blogPostReadRepository, IBlogPostWriteRepository blogPostWriteRepository, IMapper mapper)
+        public BlogPostsController(IBlogPostReadRepository blogPostReadRepository, IBlogPostWriteRepository blogPostWriteRepository, ITagReadRepository tagReadRepository, IMapper mapper)
         {
             _blogPostsReadRepository = blogPostReadRepository;
             _blogPostsWriteRepository = blogPostWriteRepository;
+            _tagReadRepository = tagReadRepository;
             _mapper = mapper;
         }
 
@@ -36,9 +39,18 @@ namespace off_tone.WebApi.Controllers
         public async Task<bool> AddBlogPostAsync(BlogPostCreateDto blogPostCreateDto)
         {
             // Implement a tag conroller and make a validation here if the given tag exists
-            var blogPost = _mapper.Map<BlogPost>(blogPostCreateDto);
-            await _blogPostsWriteRepository.AddAsync(blogPost);
-            return await _blogPostsWriteRepository.SaveAsync();
+            var returnedTags = _tagReadRepository.FilterTags(blogPostCreateDto.TagIds);
+            if (returnedTags.Count == blogPostCreateDto.TagIds.Count)
+            {
+                var blogPost = _mapper.Map<BlogPost>(blogPostCreateDto);
+                blogPost.Tags = returnedTags;
+                await _blogPostsWriteRepository.AddAsync(blogPost);
+                return await _blogPostsWriteRepository.SaveAsync();
+            } else
+            {
+                throw new Exception("Tags do not exist.");
+            }
+            
         }
 
         [HttpPut("update/{id}")]
@@ -52,9 +64,7 @@ namespace off_tone.WebApi.Controllers
             }
 
             _mapper.Map(blogPostUpdateDto, blogPost);
-            await _blogPostsWriteRepository.SaveAsync();
-
-            return true;
+            return await _blogPostsWriteRepository.SaveAsync();
         }
     }
 }

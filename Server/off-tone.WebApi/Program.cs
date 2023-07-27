@@ -1,6 +1,7 @@
 using off_tone.Application.Extensions;
 using off_tone.Application.Interfaces.Repositories.BlogPostRepos;
 using off_tone.Application.Interfaces.Repositories.BlogRepos;
+using off_tone.Application.Interfaces.Repositories.TagRepos;
 using off_tone.Persistence.Extensions;
 using off_tone.Persistence.Seeds;
 
@@ -39,7 +40,8 @@ using (var scope = app.Services.CreateScope())
     {
         var blogPostWriteRepository = services.GetService<IBlogPostWriteRepository>();
         var blogWriteRepository = services.GetService<IBlogWriteRepository>();
-        await DbInitializer.seedBlogPosts(blogPostWriteRepository, blogWriteRepository);
+        var tagWriteRepostitory = services.GetService<ITagWriteRepository>();
+        await DbInitializer.seedBlogPosts(blogPostWriteRepository, blogWriteRepository, tagWriteRepostitory);
     }
     catch(Exception ex)
     {

@@ -9,6 +9,7 @@ using off_tone.Persistence.Repositories.Common;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -45,6 +46,11 @@ namespace off_tone.Persistence.Repositories.TagRepos
                     TagStrings = p.Tags.Select(t => t.Name).ToArray(),
                 }).ToList(),
             });
+        }
+        public List<Tag> FilterTags(List<int> tagIds)
+        {
+            var filteredTags = Table.Where(tag => tagIds.Contains(tag.TagId)).ToList();
+            return filteredTags;
         }
     }
 }

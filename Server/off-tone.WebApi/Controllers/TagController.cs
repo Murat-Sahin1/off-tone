@@ -39,19 +39,29 @@ namespace off_tone.WebApi.Controllers
         [HttpPost("add")]
         public async Task<bool> AddTagAsync(TagCreateDto tagCreateDto)
         {
+            var fetchedTag = await _tagReadRepository.GetByIdAsync(tagCreateDto.TagId);
+            if (fetchedTag != null)
+            {
+                throw new Exception("Tag Already Exists");
+            }
             var tag = _mapper.Map<Tag>(tagCreateDto);
             await _tagWriteRepository.AddAsync(tag);
-            return true;
+            return await _tagWriteRepository.SaveAsync();
         }
 
         [HttpPut("update/{id}")]
-        public async Task<bool> UpdateTag(TagUpdateDto tagUpdateDto, int id)
+        public async Task<bool> UpdateTag(int id, TagUpdateDto tagUpdateDto)
         {
-            var tag = _tagReadRepository.GetByIdAsync(id);
-            await _mapper.Map(tagUpdateDto, tag);
-            await _tagWriteRepository.SaveAsync();
+            var tag = await _tagReadRepository.GetByIdAsync(id);
+            _mapper.Map(tagUpdateDto, tag);
+            return await _tagWriteRepository.SaveAsync();
+        }
 
-            return true;
+        [HttpDelete("delete/{id}")]
+        public async Task<bool> DeleteTag(int id)
+        {
+            await _tagWriteRepository.RemoveById(id);
+            return await _tagWriteRepository.SaveAsync();
         }
     }
 }

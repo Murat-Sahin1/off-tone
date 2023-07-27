@@ -1,5 +1,6 @@
 ﻿using off_tone.Application.Interfaces.Repositories.BlogPostRepos;
 using off_tone.Application.Interfaces.Repositories.BlogRepos;
+using off_tone.Application.Interfaces.Repositories.TagRepos;
 using off_tone.Domain.Entities;
 using off_tone.Persistence.Repositories.BlogRepos;
 using System.Reflection.Metadata;
@@ -8,7 +9,7 @@ namespace off_tone.Persistence.Seeds
 {
     public static class DbInitializer
     {
-        public static async Task<bool> seedBlogPosts(IBlogPostWriteRepository blogPostWriteRepository, IBlogWriteRepository blogWriteRepository)
+        public static async Task<bool> seedBlogPosts(IBlogPostWriteRepository blogPostWriteRepository, IBlogWriteRepository blogWriteRepository, ITagWriteRepository tagWriteRepository)
         {
 
             if (blogPostWriteRepository.AnyElements())
@@ -34,6 +35,8 @@ namespace off_tone.Persistence.Seeds
                 tags.Add(tag);
             }
 
+            
+
             for (int i = 0; i < 10; i++)
             {
                 var blog = new Blog
@@ -57,6 +60,7 @@ namespace off_tone.Persistence.Seeds
                         BlogPostText = "BlogDescription" + j + flag,
                         Reviews = new List<Review>(),
                         Tags = hasTwoTags > 0 ? new List<Tag>() { tags.ElementAt(tagOne), tags.ElementAt(tagTwo) } : new List<Tag>() { tags.ElementAt(tagOne) },
+                        Blog = blog,
                     };
                     blog.BlogPosts.Add(blogPost);
                     blogPosts.Add(blogPost);
@@ -74,6 +78,7 @@ namespace off_tone.Persistence.Seeds
 
             try
             {
+                await tagWriteRepository.InsertRangeAsync(tags);
                 await blogWriteRepository.InsertRangeAsync(blogs);
                 await blogPostWriteRepository.InsertRangeAsync(blogPosts);
 

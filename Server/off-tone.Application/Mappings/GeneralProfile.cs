@@ -26,6 +26,7 @@ namespace off_tone.Application.Mappings
 
             // Tag ----------------------
             CreateMap<TagCreateDto, Tag>();
+            CreateMap<TagUpdateDto, Tag>();
         }
     }
 }
