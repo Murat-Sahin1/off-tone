@@ -38,7 +38,6 @@ namespace off_tone.WebApi.Controllers
         [HttpPost("add")]
         public async Task<bool> AddBlogPostAsync(BlogPostCreateDto blogPostCreateDto)
         {
-            // Implement a tag conroller and make a validation here if the given tag exists
             var returnedTags = _tagReadRepository.FilterTags(blogPostCreateDto.TagIds);
             if (returnedTags.Count == blogPostCreateDto.TagIds.Count)
             {

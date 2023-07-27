@@ -8,7 +8,6 @@ namespace off_tone.Application.Dtos.TagDtos
 {
     public class TagCreateDto
     {
-        public int TagId { get; set; }
         public string Name { get; set; }
     }
 }

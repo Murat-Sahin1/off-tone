@@ -32,7 +32,7 @@ namespace off_tone.Persistence.Repositories.TagRepos
 
         public override IQueryable<TagListDto> GetByIdMappedToDto(int id)
         {
-            return Table.AsQueryable().Where(t => t.TagId == id).Select(t => new TagListDto
+            return Table.AsNoTracking().AsQueryable().Where(t => t.TagId == id).Select(t => new TagListDto
             {
                 TagId = t.TagId,
                 TagName = t.Name,
@@ -47,6 +47,7 @@ namespace off_tone.Persistence.Repositories.TagRepos
                 }).ToList(),
             });
         }
+        // TO-DO: Make this generic
         public List<Tag> FilterTags(List<int> tagIds)
         {
             var filteredTags = Table.Where(tag => tagIds.Contains(tag.TagId)).ToList();

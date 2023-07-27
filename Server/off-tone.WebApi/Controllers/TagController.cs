@@ -39,7 +39,7 @@ namespace off_tone.WebApi.Controllers
         [HttpPost("add")]
         public async Task<bool> AddTagAsync(TagCreateDto tagCreateDto)
         {
-            var fetchedTag = await _tagReadRepository.GetByIdAsync(tagCreateDto.TagId);
+            var fetchedTag = await _tagReadRepository.GetWhere(tag => tag.Name == tagCreateDto.Name).FirstOrDefaultAsync();
             if (fetchedTag != null)
             {
                 throw new Exception("Tag Already Exists");

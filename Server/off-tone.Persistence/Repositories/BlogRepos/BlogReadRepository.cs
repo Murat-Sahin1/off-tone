@@ -1,4 +1,5 @@
-﻿using off_tone.Application.Dtos.BlogDtos;
+﻿using Microsoft.EntityFrameworkCore;
+using off_tone.Application.Dtos.BlogDtos;
 using off_tone.Application.Dtos.BlogPostDtos;
 using off_tone.Application.Interfaces.Repositories.BlogRepos;
 using off_tone.Domain.Entities;
@@ -13,7 +14,7 @@ namespace off_tone.Persistence.Repositories.BlogRepos
 
         public override IQueryable<BlogListDto> GetAllMappedToDto()
         {
-            return Table.AsQueryable().Select(b => new BlogListDto
+            return Table.AsNoTracking().AsQueryable().AsNoTracking().Select(b => new BlogListDto
             {
                 BlogId = b.BlogId,
                 BlogName = b.BlogName,
@@ -24,7 +25,7 @@ namespace off_tone.Persistence.Repositories.BlogRepos
 
         public override IQueryable<BlogListDto> GetByIdMappedToDto(int id)
         {
-            return Table.AsQueryable().Where(b => b.BlogId == id).Select(b => new BlogListDto
+            return Table.AsNoTracking().AsQueryable().Where(b => b.BlogId == id).Select(b => new BlogListDto
             {
                 BlogId = b.BlogId,
                 BlogName = b.BlogName,

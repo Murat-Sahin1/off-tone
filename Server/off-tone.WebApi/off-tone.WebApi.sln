@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.4.33205.214
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "off-tone.WebApi", "off-tone.WebApi.csproj", "{C56A0A8D-409A-4AD5-B581-4FE0D859321B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "off-tone.WebApi", "off-tone.WebApi.csproj", "{C56A0A8D-409A-4AD5-B581-4FE0D859321B}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Presentation", "Presentation", "{3EB874F4-E4EC-4ED4-9DAC-CAAFDA06C2FA}"
 EndProject
@@ -11,19 +11,19 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Infrastructure", "Infrastru
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Core", "Core", "{0EE73EB0-F785-4332-BFDA-B82BCB4B89CA}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "off-tone.Infrastructure", "..\off-tone.Infrastructure\off-tone.Infrastructure.csproj", "{45DA55FE-F914-4EF7-AEA9-71D1570F456D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "off-tone.Infrastructure", "..\off-tone.Infrastructure\off-tone.Infrastructure.csproj", "{45DA55FE-F914-4EF7-AEA9-71D1570F456D}"
 	ProjectSection(ProjectDependencies) = postProject
 		{EBE134BA-9CF3-4DF1-9F3D-4FF05A52C327} = {EBE134BA-9CF3-4DF1-9F3D-4FF05A52C327}
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "off-tone.Persistence", "..\off-tone.Persistence\off-tone.Persistence.csproj", "{738D3524-793C-4982-8315-2B49E75A724A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "off-tone.Persistence", "..\off-tone.Persistence\off-tone.Persistence.csproj", "{738D3524-793C-4982-8315-2B49E75A724A}"
 	ProjectSection(ProjectDependencies) = postProject
 		{EBE134BA-9CF3-4DF1-9F3D-4FF05A52C327} = {EBE134BA-9CF3-4DF1-9F3D-4FF05A52C327}
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "off-tone.Domain", "..\off-tone.Domain\off-tone.Domain.csproj", "{1D4FEFA9-F2DD-4615-95D6-AC1FF36181F8}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "off-tone.Domain", "..\off-tone.Domain\off-tone.Domain.csproj", "{1D4FEFA9-F2DD-4615-95D6-AC1FF36181F8}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "off-tone.Application", "..\off-tone.Application\off-tone.Application.csproj", "{EBE134BA-9CF3-4DF1-9F3D-4FF05A52C327}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "off-tone.Application", "..\off-tone.Application\off-tone.Application.csproj", "{EBE134BA-9CF3-4DF1-9F3D-4FF05A52C327}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

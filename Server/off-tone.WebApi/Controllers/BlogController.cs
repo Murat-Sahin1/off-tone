@@ -34,7 +34,7 @@ namespace off_tone.WebApi.Controllers
         [HttpGet("{id}")]
         public IQueryable<BlogListDto> GetMappedBlogWithRelations(int id)
         {
-            return _blogReadRepository.GetByIdMappedToDto(id).AsNoTracking();
+            return _blogReadRepository.GetByIdMappedToDto(id);
         }
 
         [HttpPost("add")]
