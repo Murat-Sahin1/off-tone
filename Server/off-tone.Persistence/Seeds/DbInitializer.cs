@@ -25,6 +25,10 @@ namespace off_tone.Persistence.Seeds
             int count = 0;
             var random = new Random();
 
+            tags.Add(new Tag
+            {
+                Name = "Others Tag",
+            });
 
             for (int i = 0; i < 10; i++)
             {
@@ -34,8 +38,6 @@ namespace off_tone.Persistence.Seeds
                 };
                 tags.Add(tag);
             }
-
-            
 
             for (int i = 0; i < 10; i++)
             {
@@ -61,6 +63,7 @@ namespace off_tone.Persistence.Seeds
                         Reviews = new List<Review>(),
                         Tags = hasTwoTags > 0 ? new List<Tag>() { tags.ElementAt(tagOne), tags.ElementAt(tagTwo) } : new List<Tag>() { tags.ElementAt(tagOne) },
                         Blog = blog,
+                        //CreationDate = DateTime.Now,
                     };
                     blog.BlogPosts.Add(blogPost);
                     blogPosts.Add(blogPost);
@@ -68,12 +71,6 @@ namespace off_tone.Persistence.Seeds
                 }
                 blogs.Add(blog);
                 flag = count + 1;
-            }
-
-            for (int i = 0; i < blogs.Count(); i++)
-            {
-                Console.WriteLine("Blog IDS: ");
-                Console.WriteLine(blogs[i].BlogId);
             }
 
             try
@@ -93,37 +90,3 @@ namespace off_tone.Persistence.Seeds
         }
     }
 }
-
-/*
-             int flag = 0;
-            int count = 0;
-            for (int i = 0; i < 10; i++)
-            {
-                var blog = new Blog
-                {
-                    BlogName = "Blog " + i,
-                    BlogDescription = "BlogDescription",
-                    SubName = "MySubName",
-                    About = "AboutMyBlog",
-                    BlogPosts = new List<BlogPost>()
-                };
-
-                for (int j = 0; j < 10; j++)
-                {
-                    var blogPost = new BlogPost
-                    {
-                        BlogPostTitle = "BlogPost " + j + flag,
-                        BlogPostText = "BlogDescription" + j + flag,
-                        Reviews = new List<Review>(),
-                        Tags = new List<Tag>()
-                    };
-                    blog.BlogPosts.Add(blogPost);
-                    blogPosts.Add(blogPost);
-                    count = j + flag;
-                }
-                blogs.Add(blog);
-                flag = count + 1;
-
-hasTwoTags > 0 ? new List<Tag>() { tags.ElementAt(tagOne), tags.ElementAt(tagTwo) } : new List<Tag>() { tags.ElementAt(tagOne) },
-            }
- */

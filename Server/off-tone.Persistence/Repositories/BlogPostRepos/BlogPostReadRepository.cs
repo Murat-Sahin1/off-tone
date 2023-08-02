@@ -21,6 +21,9 @@ namespace off_tone.Persistence.Repositories.BlogPostRepos
                 BlogPostText = bp.BlogPostText,
                 BlogName = bp.Blog.BlogName,
                 TagStrings = bp.Tags.Select(t => t.Name).ToArray(),
+                AvarageReviewsVote = bp.Reviews.Select(r => (double?)r.Stars).Average(),
+                ReviewCount = bp.Reviews.Count,
+                CreationDate = bp.CreationDate,
             });
         }
 
@@ -34,6 +37,9 @@ namespace off_tone.Persistence.Repositories.BlogPostRepos
                 BlogPostText = bp.BlogPostText,
                 BlogName = bp.Blog.BlogName,
                 TagStrings = bp.Tags.Select(t => t.Name).ToArray(),
+                AvarageReviewsVote = bp.Reviews.Select(r => (double?)r.Stars).Average(),
+                ReviewCount = bp.Reviews.Count,
+                CreationDate = bp.CreationDate,
             });
         }
     }

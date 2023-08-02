@@ -12,5 +12,6 @@ namespace off_tone.Application.Interfaces.Repositories.TagRepos
     public interface ITagReadRepository: IReadRepository<Tag, TagListDto> 
     {
         public List<Tag> FilterTags(List<int> tagIds);
+        public Task<Tag> GetDefaultTag();
     }
 }

@@ -16,11 +16,5 @@ namespace off_tone.Persistence.Repositories.BlogPostRepos
     public class BlogPostWriteRepository : WriteRepository<BlogPost>, IBlogPostWriteRepository
     {
         public BlogPostWriteRepository(BlogDbContext blogDbContext) : base(blogDbContext) { }
-
-        public override async Task<bool> AddAsync(BlogPost entity)
-        {
-            EntityEntry<BlogPost> entityEntry = await Table.AddAsync(entity);
-            return entityEntry.State == EntityState.Added;
-        }
     }
 }

@@ -53,5 +53,32 @@ namespace off_tone.Persistence.Repositories.TagRepos
             var filteredTags = Table.Where(tag => tagIds.Contains(tag.TagId)).ToList();
             return filteredTags;
         }
+
+        public async Task<Tag> GetDefaultTag()
+        {
+            return await Table.Where(t => t.TagId == 1).Select(t => new Tag
+            {
+                TagId = t.TagId,
+                Name = t.Name,
+                Posts = t.Posts,
+            }).AsNoTracking().FirstOrDefaultAsync();
+        }
+
+        public async override Task<Tag> GetByIdAsync(int id)
+        {
+            return await Table.Where(t => t.TagId == id).AsNoTracking().Select(t => new Tag
+            {
+                TagId = t.TagId,
+                Name = t.Name,
+                Posts = (ICollection<BlogPost>)t.Posts.Select(bp => new BlogPost
+                {
+                    BlogPostId = bp.BlogPostId,
+                    BlogId = bp.BlogId,
+                    BlogPostText = bp.BlogPostText,
+                    BlogPostTitle = bp.BlogPostTitle,
+                    Tags = bp.Tags,
+                }),
+            }).FirstOrDefaultAsync();
+        }
     }
 }

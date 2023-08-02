@@ -15,7 +15,7 @@ namespace off_tone.Persistence.Repositories.Common
         public ReadRepository(BlogDbContext blogDbContext) : base(blogDbContext) {}
         public abstract IQueryable<TDto> GetAllMappedToDto();
         public abstract IQueryable<TDto> GetByIdMappedToDto(int id);
-        public async Task<T> GetByIdAsync(int id)
+        public async virtual Task<T> GetByIdAsync(int id)
         {
             return await Table.FindAsync(id);
         }

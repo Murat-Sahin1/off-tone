@@ -8,5 +8,8 @@
         public string BlogPostTitle { get; set; }
         public string BlogPostText { get; set; }
         public string[] TagStrings { get; set; }
+        public double? AvarageReviewsVote { get; set; }
+        public int ReviewCount { get; set; }
+        public DateTime CreationDate { get; set; }
     }
 }

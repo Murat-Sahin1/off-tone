@@ -39,7 +39,7 @@ namespace off_tone.WebApi.Controllers
         public async Task<bool> AddBlogPostAsync(BlogPostCreateDto blogPostCreateDto)
         {
             var returnedTags = _tagReadRepository.FilterTags(blogPostCreateDto.TagIds);
-            if (returnedTags.Count == blogPostCreateDto.TagIds.Count)
+            if (returnedTags.Count > 0)
             {
                 var blogPost = _mapper.Map<BlogPost>(blogPostCreateDto);
                 blogPost.Tags = returnedTags;

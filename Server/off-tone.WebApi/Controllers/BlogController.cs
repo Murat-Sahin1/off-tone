@@ -60,5 +60,7 @@ namespace off_tone.WebApi.Controllers
 
             return true;
         }
+        /* [HttpDelete("delete/{id}")]
+        public async Task<bool> */ 
     }
 }
