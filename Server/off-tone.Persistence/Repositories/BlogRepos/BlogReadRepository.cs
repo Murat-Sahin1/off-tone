@@ -4,6 +4,7 @@ using off_tone.Application.Dtos.BlogPostDtos;
 using off_tone.Application.Interfaces.Repositories.BlogRepos;
 using off_tone.Domain.Entities;
 using off_tone.Persistence.Contexts;
+using off_tone.Persistence.QueryObjects.BlogQueryObjects;
 using off_tone.Persistence.Repositories.Common;
 
 namespace off_tone.Persistence.Repositories.BlogRepos
@@ -20,7 +21,7 @@ namespace off_tone.Persistence.Repositories.BlogRepos
                 BlogName = b.BlogName,
                 BlogDescription = b.BlogDescription,
                 SubName = b.SubName
-            });
+            }).OrderBlogsBy(OrderBlogsByOptions.DefaultOrder);
         }
 
         public override IQueryable<BlogListDto> GetByIdMappedToDto(int id)

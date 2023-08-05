@@ -4,7 +4,7 @@ using off_tone.Persistence.Contexts;
 using off_tone.Persistence.Repositories.Common;
 using Microsoft.EntityFrameworkCore;
 using off_tone.Application.Dtos.BlogPostDtos;
-using off_tone.Persistence.QueryObjects;
+using off_tone.Persistence.QueryObjects.BlogPostQueryObjects;
 
 namespace off_tone.Persistence.Repositories.BlogPostRepos
 {
@@ -25,7 +25,7 @@ namespace off_tone.Persistence.Repositories.BlogPostRepos
                 AvarageReviewsVote = bp.Reviews.Select(r => (double?)r.Stars).Average(),
                 ReviewCount = bp.Reviews.Count,
                 CreationDate = bp.CreationDate,
-            });
+            }).OrderBlogPostsBy(OrderBlogPostsByOptions.DefaultOrder);
         }
 
         public override IQueryable<BlogPostListDto> GetByIdMappedToDto(int id)
