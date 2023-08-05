@@ -18,7 +18,6 @@ namespace off_tone.Persistence.QueryObjects
 
     public static class BlogPostListDtoSort
     {
-
         public static IQueryable<BlogPostListDto> OrderBlogPostsBy(this IQueryable<BlogPostListDto> blogPosts, OrderByOptions orderByOptions)
         {
             switch (orderByOptions)

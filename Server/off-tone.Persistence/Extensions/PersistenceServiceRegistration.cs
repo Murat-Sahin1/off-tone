@@ -8,6 +8,8 @@ using off_tone.Application.Interfaces.Repositories.BlogRepos;
 using off_tone.Persistence.Repositories.BlogRepos;
 using off_tone.Application.Interfaces.Repositories.TagRepos;
 using off_tone.Persistence.Repositories.TagRepos;
+using off_tone.Application.Interfaces.Repositories.ReviewRepos;
+using off_tone.Persistence.Repositories.ReviewRepos;
 
 namespace off_tone.Persistence.Extensions
 {
@@ -26,6 +28,9 @@ namespace off_tone.Persistence.Extensions
 
             services.AddScoped<ITagReadRepository, TagReadRepository>();
             services.AddScoped<ITagWriteRepository, TagWriteRepository>();
+
+            services.AddScoped<IReviewReadRepository, ReviewReadRepository>();
+            services.AddScoped<IReviewWriteRepository, ReviewWriteRepository>();
 
             return services;
         }

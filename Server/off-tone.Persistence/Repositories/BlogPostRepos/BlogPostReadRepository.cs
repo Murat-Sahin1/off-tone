@@ -4,6 +4,7 @@ using off_tone.Persistence.Contexts;
 using off_tone.Persistence.Repositories.Common;
 using Microsoft.EntityFrameworkCore;
 using off_tone.Application.Dtos.BlogPostDtos;
+using off_tone.Persistence.QueryObjects;
 
 namespace off_tone.Persistence.Repositories.BlogPostRepos
 {

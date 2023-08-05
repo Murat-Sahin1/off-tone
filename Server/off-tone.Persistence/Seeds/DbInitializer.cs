@@ -1,5 +1,6 @@
 ﻿using off_tone.Application.Interfaces.Repositories.BlogPostRepos;
 using off_tone.Application.Interfaces.Repositories.BlogRepos;
+using off_tone.Application.Interfaces.Repositories.ReviewRepos;
 using off_tone.Application.Interfaces.Repositories.TagRepos;
 using off_tone.Domain.Entities;
 using off_tone.Persistence.Repositories.BlogRepos;
@@ -9,7 +10,7 @@ namespace off_tone.Persistence.Seeds
 {
     public static class DbInitializer
     {
-        public static async Task<bool> seedBlogPosts(IBlogPostWriteRepository blogPostWriteRepository, IBlogWriteRepository blogWriteRepository, ITagWriteRepository tagWriteRepository)
+        public static async Task<bool> seedBlogPosts(IBlogPostWriteRepository blogPostWriteRepository, IBlogWriteRepository blogWriteRepository, ITagWriteRepository tagWriteRepository, IReviewWriteRepository reviewWriteRepository)
         {
 
             if (blogPostWriteRepository.AnyElements())
@@ -20,6 +21,7 @@ namespace off_tone.Persistence.Seeds
             var blogs = new List<Blog>();
             var blogPosts = new List<BlogPost>();
             var tags = new List<Tag>();
+            var totalReviews = new List<Review>();
 
             int flag = 0;
             int count = 0;
@@ -47,7 +49,8 @@ namespace off_tone.Persistence.Seeds
                     BlogDescription = "BlogDescription",
                     SubName = "MySubName",
                     About = "AboutMyBlog",
-                    BlogPosts = new List<BlogPost>()
+                    BlogPosts = new List<BlogPost>(),
+                    CreationDate = DateTime.UtcNow
                 };
 
                 for (int j = 0; j < 10; j++)
@@ -56,18 +59,35 @@ namespace off_tone.Persistence.Seeds
                     int tagOne = random.Next(0, tags.Count);
                     int tagTwo = random.Next(0, tags.Count);
 
+                    var reviews = new List<Review>();
+
+                    for (int r = 0; r < 5; r++)
+                    {
+                        int givenStars = random.Next(0, 6);
+
+                        reviews.Add(new Review
+                        {
+                            VoterName = "Voter " + r,
+                            Stars = givenStars,
+                            Comment = "Lorem ipsum " + r,
+                            CreationDate = DateTime.UtcNow
+                        });
+                    }
+
                     var blogPost = new BlogPost
                     {
                         BlogPostTitle = "BlogPost " + j + flag,
                         BlogPostText = "BlogDescription" + j + flag,
-                        Reviews = new List<Review>(),
+                        Reviews = reviews,
                         Tags = hasTwoTags > 0 ? new List<Tag>() { tags.ElementAt(tagOne), tags.ElementAt(tagTwo) } : new List<Tag>() { tags.ElementAt(tagOne) },
                         Blog = blog,
-                        //CreationDate = DateTime.Now,
+                        CreationDate = DateTime.UtcNow,
                     };
+
                     blog.BlogPosts.Add(blogPost);
                     blogPosts.Add(blogPost);
                     count = j + flag;
+                    totalReviews = totalReviews.Concat(reviews).ToList();
                 }
                 blogs.Add(blog);
                 flag = count + 1;
@@ -76,6 +96,7 @@ namespace off_tone.Persistence.Seeds
             try
             {
                 await tagWriteRepository.InsertRangeAsync(tags);
+                await reviewWriteRepository.InsertRangeAsync(totalReviews);
                 await blogWriteRepository.InsertRangeAsync(blogs);
                 await blogPostWriteRepository.InsertRangeAsync(blogPosts);
 
