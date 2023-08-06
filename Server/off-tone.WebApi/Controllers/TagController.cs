@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using off_tone.Application.Dtos.BlogDtos;
 using off_tone.Application.Dtos.TagDtos;
+using off_tone.Application.Feature.QueryOptions.Common;
 using off_tone.Application.Interfaces.Repositories.BlogPostRepos;
 using off_tone.Application.Interfaces.Repositories.TagRepos;
 using off_tone.Domain.Entities;
@@ -28,9 +29,9 @@ namespace off_tone.WebApi.Controllers
         }
 
         [HttpGet]
-        public IQueryable<TagListDto> GetAllMappedTags()
+        public IQueryable<TagListDto> GetAllMappedTags([FromQuery] int orderBy)
         {
-            return _tagReadRepository.GetAllMappedToDto();
+            return _tagReadRepository.GetAllMappedToDto(new QueryOptions { orderBy = orderBy });
         }
 
         [HttpGet("{id}")]

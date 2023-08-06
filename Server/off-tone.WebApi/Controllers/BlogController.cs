@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using off_tone.Application.Dtos.BlogDtos;
+using off_tone.Application.Feature.QueryOptions.Common;
 using off_tone.Application.Interfaces.Repositories.BlogRepos;
 using off_tone.Domain.Entities;
 
@@ -26,9 +27,9 @@ namespace off_tone.WebApi.Controllers
         }
 
         [HttpGet]
-        public IQueryable<BlogListDto> GetAllMappedBlogs()
+        public IQueryable<BlogListDto> GetAllMappedBlogs([FromQuery] int orderBy)
         {
-            return _blogReadRepository.GetAllMappedToDto().AsNoTracking();
+            return _blogReadRepository.GetAllMappedToDto(new QueryOptions { orderBy = orderBy });
         }
 
         [HttpGet("{id}")]

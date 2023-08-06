@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using off_tone.Application.Dtos.BlogPostDtos;
+using off_tone.Application.Feature.QueryOptions.Common;
 using off_tone.Application.Interfaces.Repositories.BlogPostRepos;
 using off_tone.Application.Interfaces.Repositories.TagRepos;
 using off_tone.Domain.Entities;
@@ -24,9 +25,9 @@ namespace off_tone.WebApi.Controllers
         }
 
         [HttpGet]
-        public IQueryable<BlogPostListDto> GetAllMappedBlogPosts()
+        public IQueryable<BlogPostListDto> GetAllMappedBlogPosts([FromQuery] int orderBy)
         {
-            return _blogPostsReadRepository.GetAllMappedToDto();
+            return _blogPostsReadRepository.GetAllMappedToDto(new QueryOptions { orderBy = orderBy});
         }
 
         [HttpGet("{id}")]

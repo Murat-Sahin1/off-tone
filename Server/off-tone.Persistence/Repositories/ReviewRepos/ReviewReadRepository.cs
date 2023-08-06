@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using off_tone.Application.Dtos.ReviewDtos;
+using off_tone.Application.Feature.QueryOptions.Common;
 using off_tone.Application.Interfaces.Repositories.ReviewRepos;
 using off_tone.Domain.Entities;
 using off_tone.Persistence.Contexts;
@@ -19,7 +20,7 @@ namespace off_tone.Persistence.Repositories.ReviewRepos
         {
         }
 
-        public override IQueryable<ReviewListDto> GetAllMappedToDto()
+        public override IQueryable<ReviewListDto> GetAllMappedToDto(QueryOptions queryOptions)
         {
             return Table.AsNoTracking().AsQueryable().Select(r => new ReviewListDto
             {
@@ -27,7 +28,7 @@ namespace off_tone.Persistence.Repositories.ReviewRepos
                 VoterName = r.VoterName,
                 Stars = r.Stars,
                 Comment = r.Comment,
-            }).OrderReviewsBy(OrderReviewsByOptions.ByVote);
+            });
         }
 
         public override IQueryable<ReviewListDto> GetByIdMappedToDto(int id)

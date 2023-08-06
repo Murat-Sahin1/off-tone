@@ -1,25 +1,19 @@
 ﻿using off_tone.Application.Dtos.BlogPostDtos;
+using off_tone.Application.Feature.QueryOptions.Common;
 
 namespace off_tone.Persistence.QueryObjects.BlogPostQueryObjects
 {
-    public enum OrderBlogPostsByOptions
-    {
-        DefaultOrder = 0,
-        ByVotes = 1,
-        ByPublicationDate = 2,
-    }
-
     public static class BlogPostListDtoSort
     {
-        public static IQueryable<BlogPostListDto> OrderBlogPostsBy(this IQueryable<BlogPostListDto> blogPosts, OrderBlogPostsByOptions orderByOptions)
+        public static IQueryable<BlogPostListDto> OrderBlogPostsBy(this IQueryable<BlogPostListDto> blogPosts, OrderByOptions orderByOptions)
         {
             switch (orderByOptions)
             {
-                case OrderBlogPostsByOptions.DefaultOrder:
+                case OrderByOptions.DefaultOrder:
                     return blogPosts.OrderByDescending(x => x.BlogPostId);
-                case OrderBlogPostsByOptions.ByVotes:
+                case OrderByOptions.ByVote:
                     return blogPosts.OrderByDescending(x => x.AvarageReviewsVote);
-                case OrderBlogPostsByOptions.ByPublicationDate:
+                case OrderByOptions.ByPublicationDate:
                     return blogPosts.OrderByDescending(x => x.CreationDate);
                 default:
                     throw new ArgumentOutOfRangeException(nameof(orderByOptions), orderByOptions, null);

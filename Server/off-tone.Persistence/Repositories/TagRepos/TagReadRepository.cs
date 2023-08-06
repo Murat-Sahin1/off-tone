@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using off_tone.Application.Dtos.BlogPostDtos;
 using off_tone.Application.Dtos.TagDtos;
+using off_tone.Application.Feature.QueryOptions.Common;
 using off_tone.Application.Interfaces.Repositories.Common;
 using off_tone.Application.Interfaces.Repositories.TagRepos;
 using off_tone.Domain.Entities;
@@ -21,7 +22,7 @@ namespace off_tone.Persistence.Repositories.TagRepos
         {
         }
 
-        public override IQueryable<TagListDto> GetAllMappedToDto()
+        public override IQueryable<TagListDto> GetAllMappedToDto(QueryOptions queryOptions)
         {
             return Table.AsNoTracking().AsQueryable().Select(t => new TagListDto
             {

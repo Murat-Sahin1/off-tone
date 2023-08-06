@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using off_tone.Application.Dtos.BlogDtos;
 using off_tone.Application.Dtos.BlogPostDtos;
+using off_tone.Application.Feature.QueryOptions.Common;
 using off_tone.Application.Interfaces.Repositories.BlogRepos;
 using off_tone.Domain.Entities;
 using off_tone.Persistence.Contexts;
@@ -13,7 +14,7 @@ namespace off_tone.Persistence.Repositories.BlogRepos
     {
         public BlogReadRepository(BlogDbContext blogDbContext) : base(blogDbContext) { }
 
-        public override IQueryable<BlogListDto> GetAllMappedToDto()
+        public override IQueryable<BlogListDto> GetAllMappedToDto(QueryOptions queryOptions)
         {
             return Table.AsNoTracking().AsQueryable().AsNoTracking().Select(b => new BlogListDto
             {
@@ -21,7 +22,7 @@ namespace off_tone.Persistence.Repositories.BlogRepos
                 BlogName = b.BlogName,
                 BlogDescription = b.BlogDescription,
                 SubName = b.SubName
-            }).OrderBlogsBy(OrderBlogsByOptions.DefaultOrder);
+            }).OrderBlogsBy((OrderByOptions)queryOptions.orderBy);
         }
 
         public override IQueryable<BlogListDto> GetByIdMappedToDto(int id)
