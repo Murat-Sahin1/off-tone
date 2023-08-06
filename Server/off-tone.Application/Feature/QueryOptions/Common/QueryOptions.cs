@@ -10,9 +10,10 @@ namespace off_tone.Application.Feature.QueryOptions.Common
     public enum FilterByOptions
     {
         NoFilter = 0,
-        ByVotes = 1,
-        ByTags = 2,
+        ByName = 1,
+        ByVotes = 2,
         ByPublicationYear = 3,
+        ByTags = 4,
     }
     public enum OrderByOptions
     {

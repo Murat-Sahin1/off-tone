@@ -5,6 +5,7 @@ using off_tone.Application.Feature.QueryOptions.Common;
 using off_tone.Application.Interfaces.Repositories.BlogPostRepos;
 using off_tone.Application.Interfaces.Repositories.TagRepos;
 using off_tone.Domain.Entities;
+using off_tone.Persistence.Services.BlogPostServices;
 using System.Diagnostics.CodeAnalysis;
 
 namespace off_tone.WebApi.Controllers
@@ -17,12 +18,14 @@ namespace off_tone.WebApi.Controllers
         private readonly IBlogPostWriteRepository _blogPostsWriteRepository;
         private readonly ITagReadRepository _tagReadRepository;
         private readonly IMapper _mapper;
-        public BlogPostsController(IBlogPostReadRepository blogPostReadRepository, IBlogPostWriteRepository blogPostWriteRepository, ITagReadRepository tagReadRepository, IMapper mapper)
+        private readonly BlogPostFilterMenu _blogPostFilterMenu;
+        public BlogPostsController(IBlogPostReadRepository blogPostReadRepository, IBlogPostWriteRepository blogPostWriteRepository, ITagReadRepository tagReadRepository, IMapper mapper, BlogPostFilterMenu blogPostFilterMenu)
         {
             _blogPostsReadRepository = blogPostReadRepository;
             _blogPostsWriteRepository = blogPostWriteRepository;
             _tagReadRepository = tagReadRepository;
             _mapper = mapper;
+            _blogPostFilterMenu = blogPostFilterMenu;
         }
 
         [HttpGet]
@@ -35,6 +38,12 @@ namespace off_tone.WebApi.Controllers
         public IQueryable<BlogPostListDto> GetMappedBlogPost(int id)
         {
             return _blogPostsReadRepository.GetByIdMappedToDto(id);
+        }
+
+        [HttpGet("filterMenu")]
+        public IEnumerable<DropdownTuple> GetBlogPostFilterMenu([FromQuery] int filterBy)
+        {
+            return _blogPostFilterMenu.GetFilteredBlogPostMenu((FilterByOptions)filterBy);
         }
 
         [HttpPost("add")]

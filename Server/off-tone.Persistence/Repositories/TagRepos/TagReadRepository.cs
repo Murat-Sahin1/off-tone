@@ -28,7 +28,7 @@ namespace off_tone.Persistence.Repositories.TagRepos
             {
                 TagId = t.TagId,
                 TagName = t.Name,
-            });        
+            }).OrderByDescending(x => x.TagId);        
         }
 
         public override IQueryable<TagListDto> GetByIdMappedToDto(int id)

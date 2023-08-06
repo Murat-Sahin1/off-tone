@@ -27,9 +27,9 @@ namespace off_tone.WebApi.Controllers
         }
 
         [HttpGet]
-        public IQueryable<BlogListDto> GetAllMappedBlogs([FromQuery] int orderBy)
+        public IQueryable<BlogListDto> GetAllMappedBlogs([FromQuery] int orderBy, [FromQuery] int filterBy, [FromQuery] string? filterValue)
         {
-            return _blogReadRepository.GetAllMappedToDto(new QueryOptions { orderBy = orderBy });
+            return _blogReadRepository.GetAllMappedToDto(new QueryOptions { orderBy = orderBy, filterBy = filterBy, filterValue = filterValue });
         }
 
         [HttpGet("{id}")]

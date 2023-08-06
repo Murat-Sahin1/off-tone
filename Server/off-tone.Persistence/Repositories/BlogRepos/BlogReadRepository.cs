@@ -22,7 +22,9 @@ namespace off_tone.Persistence.Repositories.BlogRepos
                 BlogName = b.BlogName,
                 BlogDescription = b.BlogDescription,
                 SubName = b.SubName
-            }).OrderBlogsBy((OrderByOptions)queryOptions.orderBy);
+            })
+                .OrderBlogsBy((OrderByOptions)queryOptions.orderBy)
+                .FilterBlogsBy((FilterByOptions)queryOptions.filterBy, queryOptions.filterValue);
         }
 
         public override IQueryable<BlogListDto> GetByIdMappedToDto(int id)

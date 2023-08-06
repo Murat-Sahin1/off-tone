@@ -28,7 +28,10 @@ namespace off_tone.Persistence.Repositories.ReviewRepos
                 VoterName = r.VoterName,
                 Stars = r.Stars,
                 Comment = r.Comment,
-            });
+            })
+                .OrderReviewsBy((OrderByOptions)queryOptions.orderBy)
+                .FilterReviewsBy((FilterByOptions)queryOptions.filterBy,
+                queryOptions.filterValue);
         }
 
         public override IQueryable<ReviewListDto> GetByIdMappedToDto(int id)
