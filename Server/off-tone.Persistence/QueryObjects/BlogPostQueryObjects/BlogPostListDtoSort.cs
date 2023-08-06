@@ -15,6 +15,8 @@ namespace off_tone.Persistence.QueryObjects.BlogPostQueryObjects
                     return blogPosts.OrderByDescending(x => x.AvarageReviewsVote);
                 case OrderByOptions.ByPublicationDate:
                     return blogPosts.OrderByDescending(x => x.CreationDate);
+                case OrderByOptions.ByReviewCount:
+                    return blogPosts.OrderByDescending(x => x.ReviewCount);
                 default:
                     throw new ArgumentOutOfRangeException(nameof(orderByOptions), orderByOptions, null);
             }

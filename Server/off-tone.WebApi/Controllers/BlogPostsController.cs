@@ -5,6 +5,7 @@ using off_tone.Application.Feature.QueryOptions.Common;
 using off_tone.Application.Interfaces.Repositories.BlogPostRepos;
 using off_tone.Application.Interfaces.Repositories.TagRepos;
 using off_tone.Domain.Entities;
+using System.Diagnostics.CodeAnalysis;
 
 namespace off_tone.WebApi.Controllers
 {
@@ -25,9 +26,9 @@ namespace off_tone.WebApi.Controllers
         }
 
         [HttpGet]
-        public IQueryable<BlogPostListDto> GetAllMappedBlogPosts([FromQuery] int orderBy)
+        public IQueryable<BlogPostListDto> GetAllMappedBlogPosts([FromQuery] int orderBy, [FromQuery] int filterBy, [FromQuery][AllowNull] string? filterValue)
         {
-            return _blogPostsReadRepository.GetAllMappedToDto(new QueryOptions { orderBy = orderBy});
+            return _blogPostsReadRepository.GetAllMappedToDto(new QueryOptions { orderBy = orderBy, filterBy = filterBy, filterValue = filterValue });
         }
 
         [HttpGet("{id}")]
@@ -44,6 +45,7 @@ namespace off_tone.WebApi.Controllers
             {
                 var blogPost = _mapper.Map<BlogPost>(blogPostCreateDto);
                 blogPost.Tags = returnedTags;
+                blogPost.CreationDate = DateTime.UtcNow;
                 await _blogPostsWriteRepository.AddAsync(blogPost);
                 return await _blogPostsWriteRepository.SaveAsync();
             } else

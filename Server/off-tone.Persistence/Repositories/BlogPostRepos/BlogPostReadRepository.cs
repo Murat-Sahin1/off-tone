@@ -16,7 +16,7 @@ namespace off_tone.Persistence.Repositories.BlogPostRepos
         public override IQueryable<BlogPostListDto> GetAllMappedToDto(QueryOptions queryOptions)
         {
             return Table.AsNoTracking().AsQueryable().Select(bp => new BlogPostListDto
-            { 
+            {
                 BlogPostId = bp.BlogPostId,
                 BlogId = bp.BlogId,
                 BlogPostTitle = bp.BlogPostTitle,
@@ -26,7 +26,9 @@ namespace off_tone.Persistence.Repositories.BlogPostRepos
                 AvarageReviewsVote = bp.Reviews.Select(r => (double?)r.Stars).Average(),
                 ReviewCount = bp.Reviews.Count,
                 CreationDate = bp.CreationDate,
-            }).OrderBlogPostsBy((OrderByOptions)queryOptions.orderBy);
+            })
+                .OrderBlogPostsBy((OrderByOptions)queryOptions.orderBy)
+                .FilterBlogPostsBy((FilterByOptions)queryOptions.filterBy, queryOptions.filterValue);
         }
 
         public override IQueryable<BlogPostListDto> GetByIdMappedToDto(int id)
