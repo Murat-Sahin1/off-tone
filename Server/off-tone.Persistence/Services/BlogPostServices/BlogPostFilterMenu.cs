@@ -20,10 +20,6 @@ namespace off_tone.Persistence.Services.BlogPostServices
         {
             switch(filterOptions)
             {
-                case FilterByOptions.NoFilter:
-                    return new List<DropdownTuple>();
-                case FilterByOptions.ByVotes:
-                    return new List<DropdownTuple>();
                 case FilterByOptions.ByTags:
                     return _blogDbContext.Tags
                         .Select(t => new DropdownTuple
