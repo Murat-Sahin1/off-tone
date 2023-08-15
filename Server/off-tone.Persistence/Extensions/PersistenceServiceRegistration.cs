@@ -17,9 +17,13 @@ namespace off_tone.Persistence.Extensions
     public static class PersistenceServiceRegistration
     {
         public static IServiceCollection RegisterPersistenceServices(this IServiceCollection services, IConfiguration config)
-        {         
+        {
 
-            services.AddDbContext<BlogDbContext>(options => options.UseNpgsql(config.GetConnectionString("PostgresConnection")));
+            services.AddDbContext<BlogDbContext>(options =>
+            {
+                options.UseNpgsql(config.GetConnectionString("PostgresConnection"));
+                options.EnableSensitiveDataLogging();
+            });
 
             services.AddScoped<IBlogPostReadRepository, BlogPostReadRepository>();
             services.AddScoped<IBlogPostWriteRepository, BlogPostWriteRepository>();

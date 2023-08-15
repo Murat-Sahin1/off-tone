@@ -6,6 +6,7 @@ using off_tone.Application.Interfaces.Repositories.BlogRepos;
 using off_tone.Domain.Entities;
 using off_tone.Persistence.Contexts;
 using off_tone.Persistence.QueryObjects.BlogQueryObjects;
+using off_tone.Persistence.QueryObjects.Common;
 using off_tone.Persistence.Repositories.Common;
 
 namespace off_tone.Persistence.Repositories.BlogRepos
@@ -16,7 +17,7 @@ namespace off_tone.Persistence.Repositories.BlogRepos
 
         public override IQueryable<BlogListDto> GetAllMappedToDto(QueryOptions queryOptions)
         {
-            return Table.AsNoTracking().AsQueryable().AsNoTracking().Select(b => new BlogListDto
+            var query = Table.AsNoTracking().AsQueryable().AsNoTracking().Select(b => new BlogListDto
             {
                 BlogId = b.BlogId,
                 BlogName = b.BlogName,
@@ -25,6 +26,11 @@ namespace off_tone.Persistence.Repositories.BlogRepos
             })
                 .OrderBlogsBy((OrderByOptions)queryOptions.orderBy)
                 .FilterBlogsBy((FilterByOptions)queryOptions.filterBy, queryOptions.filterValue);
+
+            queryOptions.SetupDto(query);
+
+            return query.Page(queryOptions.PageNum -1, queryOptions.PageSize);
+
         }
 
         public override IQueryable<BlogListDto> GetByIdMappedToDto(int id)

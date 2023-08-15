@@ -17,4 +17,5 @@ namespace off_tone.Persistence.Repositories.BlogPostRepos
     {
         public BlogPostWriteRepository(BlogDbContext blogDbContext) : base(blogDbContext) { }
     }
+
 }

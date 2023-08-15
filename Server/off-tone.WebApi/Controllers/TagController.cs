@@ -1,4 +1,6 @@
 ﻿using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Authorization.Policy;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -9,6 +11,7 @@ using off_tone.Application.Interfaces.Repositories.BlogPostRepos;
 using off_tone.Application.Interfaces.Repositories.TagRepos;
 using off_tone.Domain.Entities;
 using off_tone.Persistence.Repositories.TagRepos;
+using System.Reflection.Metadata;
 
 namespace off_tone.WebApi.Controllers
 {
@@ -57,14 +60,21 @@ namespace off_tone.WebApi.Controllers
         public async Task<bool> UpdateTag(int id, TagUpdateDto tagUpdateDto)
         {
             var tag = await _tagReadRepository.GetByIdAsync(id);
+
+            if (tag.TagId != id)
+            {
+                throw new Exception("Ids are not matching.");
+            }
+
             _mapper.Map(tagUpdateDto, tag);
             return await _tagWriteRepository.SaveAsync();
         }
 
+        // BUG: Not working as expected.
         [HttpDelete("delete/{id}")]
         public async Task<bool> DeleteTag(int id)
         {   // FIX: Not working
-            var tag = await _tagReadRepository.GetByIdAsync(id);
+            var tag = await _tagReadRepository.GetByIdWithPostsAsync(id);
             var defaultTag = await _tagReadRepository.GetDefaultTag();
 
             if (defaultTag == null)
@@ -81,27 +91,23 @@ namespace off_tone.WebApi.Controllers
             {
                 throw new Exception("Cannot delete the others tag.");
             }
-
-            foreach (BlogPost post in tag.Posts)
+            
+            foreach(var post in tag.Posts.ToList())
             {
-                post.Tags.Remove(tag);
-                _blogPostWriteRepository.Update(post);
-                await _blogPostWriteRepository.SaveAsync();
-                if (!post.Tags.Contains(defaultTag))
+                if (post.Tags.Contains(defaultTag))
                 {
-                    post.Tags.Add(defaultTag);
-                    
+                    post.Tags.Remove(tag);
                 }
-                await _tagWriteRepository.SaveAsync();
-
+                else
+                {
+                    post.Tags.Remove(tag);
+                    post.Tags.Add(defaultTag);
+                }
             }
-
-            tag.Posts.Clear();
             _tagWriteRepository.Remove(tag);
-            //_tagWriteRepository.Update(defaultTag);
+            await _tagWriteRepository.SaveAsync();
 
-            await _blogPostWriteRepository.SaveAsync();
-            return await _tagWriteRepository.SaveAsync();
+            return true;
         }
     }
 }

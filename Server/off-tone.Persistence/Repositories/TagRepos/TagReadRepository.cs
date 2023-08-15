@@ -57,17 +57,25 @@ namespace off_tone.Persistence.Repositories.TagRepos
 
         public async Task<Tag> GetDefaultTag()
         {
-            return await Table.Where(t => t.TagId == 1).Select(t => new Tag
-            {
-                TagId = t.TagId,
-                Name = t.Name,
-                Posts = t.Posts,
-            }).AsNoTracking().FirstOrDefaultAsync();
+            return await Table.SingleOrDefaultAsync(t => t.TagId == 1);
         }
 
-        public async override Task<Tag> GetByIdAsync(int id)
+        public async Task<Tag> GetByIdWithPostsAsync(int id)
         {
-            return await Table.Where(t => t.TagId == id).AsNoTracking().Select(t => new Tag
+            return await Table
+                .Include(t => t.Posts)
+                    .ThenInclude(t => t.Tags)
+                .SingleOrDefaultAsync(t => t.TagId == id);
+        }
+
+    }
+}
+/*
+ * 
+ * 
+ *
+ *
+ *.Select(t => new Tag
             {
                 TagId = t.TagId,
                 Name = t.Name,
@@ -79,7 +87,5 @@ namespace off_tone.Persistence.Repositories.TagRepos
                     BlogPostTitle = bp.BlogPostTitle,
                     Tags = bp.Tags,
                 }),
-            }).FirstOrDefaultAsync();
-        }
-    }
-}
+            })
+ */

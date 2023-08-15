@@ -6,11 +6,12 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using off_tone.Application.Dtos.BlogPostDtos;
+using Microsoft.EntityFrameworkCore;
 
 namespace off_tone.Application.Interfaces.Repositories.BlogPostRepos
 {
     public interface IBlogPostReadRepository : IReadRepository<BlogPost, BlogPostListDto>
     {
-
+        
     }
 }

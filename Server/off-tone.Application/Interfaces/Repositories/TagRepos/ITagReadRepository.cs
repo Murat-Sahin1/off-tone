@@ -13,5 +13,6 @@ namespace off_tone.Application.Interfaces.Repositories.TagRepos
     {
         public List<Tag> FilterTags(List<int> tagIds);
         public Task<Tag> GetDefaultTag();
+        public Task<Tag> GetByIdWithPostsAsync(int id);
     }
 }

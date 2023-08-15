@@ -14,7 +14,6 @@ namespace off_tone.Domain.Entities
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        [AllowNull]
         public int BlogPostId { get; set; }
         public string BlogPostTitle { get; set; }
         public string BlogPostText { get; set; }
