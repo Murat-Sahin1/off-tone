@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
+using FluentValidation;
+using FluentValidation.Results;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using off_tone.Application.Dtos.BlogDtos;
 using off_tone.Application.Feature.QueryOptions.Common;
 using off_tone.Application.Interfaces.Repositories.BlogRepos;
@@ -15,14 +16,17 @@ namespace off_tone.WebApi.Controllers
         public readonly IBlogReadRepository _blogReadRepository;
         public readonly IBlogWriteRepository _blogWriteRepository;
         public readonly IMapper _mapper;
+        public readonly IValidator<BlogCreateDto> _createBlogValidator;
         public BlogController(
-            IBlogWriteRepository blogWriteRepository, 
+            IBlogWriteRepository blogWriteRepository,
             IBlogReadRepository blogReadRepository,
-            IMapper mapper
+            IMapper mapper,
+            IValidator<BlogCreateDto> createBlogValidator
             )
         {
             _blogWriteRepository = blogWriteRepository;
             _blogReadRepository = blogReadRepository;
+            _createBlogValidator = createBlogValidator;
             _mapper = mapper;
         }
 
@@ -39,11 +43,19 @@ namespace off_tone.WebApi.Controllers
         }
 
         [HttpPost("add")]
-        public async Task<bool> AddBlogAsync(BlogCreateDto blogCreateDto)
+        public async Task<IResult> AddBlogAsync(BlogCreateDto blogCreateDto)
         {
+            ValidationResult result = await _createBlogValidator.ValidateAsync(blogCreateDto);
+            
+            if (!result.IsValid)
+            {
+                return Results.ValidationProblem(result.ToDictionary());
+            }
             var blog = _mapper.Map<Blog>(blogCreateDto);
             await _blogWriteRepository.AddAsync(blog);
-            return await _blogWriteRepository.SaveAsync();
+            await _blogWriteRepository.SaveAsync();
+
+            return Results.Ok();
         }
 
         [HttpPut("update/{id}")]

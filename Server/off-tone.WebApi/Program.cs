@@ -1,3 +1,4 @@
+using FluentValidation.AspNetCore;
 using off_tone.Application.Extensions;
 using off_tone.Application.Interfaces.Repositories.BlogPostRepos;
 using off_tone.Application.Interfaces.Repositories.BlogRepos;

@@ -17,6 +17,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\off-tone.Infrastructure\off-tone.Infrastructure.csproj" />
     <ProjectReference Include="..\off-tone.Persistence\off-tone.Persistence.csproj" />
   </ItemGroup>
 
