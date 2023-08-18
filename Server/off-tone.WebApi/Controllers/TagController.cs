@@ -1,17 +1,15 @@
 ﻿using AutoMapper;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Authorization.Policy;
-using Microsoft.AspNetCore.Http;
+using FluentValidation;
+using FluentValidation.Results;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using off_tone.Application.Dtos.BlogDtos;
 using off_tone.Application.Dtos.TagDtos;
 using off_tone.Application.Feature.QueryOptions.Common;
 using off_tone.Application.Interfaces.Repositories.BlogPostRepos;
 using off_tone.Application.Interfaces.Repositories.TagRepos;
+using off_tone.Application.Validators.Tags;
 using off_tone.Domain.Entities;
-using off_tone.Persistence.Repositories.TagRepos;
-using System.Reflection.Metadata;
+
 
 namespace off_tone.WebApi.Controllers
 {
@@ -19,16 +17,20 @@ namespace off_tone.WebApi.Controllers
     [ApiController]
     public class TagController : ControllerBase
     {
-        public readonly ITagReadRepository _tagReadRepository;
-        public readonly ITagWriteRepository _tagWriteRepository;
-        public readonly IBlogPostWriteRepository _blogPostWriteRepository;
-        public readonly IMapper _mapper;
-        public TagController(ITagReadRepository tagReadRepository, ITagWriteRepository tagWriteRepository, IBlogPostWriteRepository blogPostWriteRepository, IMapper mapper)
+        private readonly ITagReadRepository _tagReadRepository;
+        private readonly ITagWriteRepository _tagWriteRepository;
+        private readonly IBlogPostWriteRepository _blogPostWriteRepository;
+        private readonly IMapper _mapper;
+        private readonly IValidator<TagCreateDto> _createTagValidator;
+        private readonly IValidator<TagUpdateDto> _updateTagValidator;
+        public TagController(ITagReadRepository tagReadRepository, ITagWriteRepository tagWriteRepository, IBlogPostWriteRepository blogPostWriteRepository, IMapper mapper, CreateTagValidator createTagValidator, IValidator<TagUpdateDto> updateTagValidator)
         {
             _tagReadRepository = tagReadRepository;
             _tagWriteRepository = tagWriteRepository;
             _blogPostWriteRepository = blogPostWriteRepository;
             _mapper = mapper;
+            _createTagValidator = createTagValidator;
+            _updateTagValidator = updateTagValidator;
         }
 
         [HttpGet]
@@ -44,8 +46,15 @@ namespace off_tone.WebApi.Controllers
         }
 
         [HttpPost("add")]
-        public async Task<bool> AddTagAsync(TagCreateDto tagCreateDto)
+        public async Task<IResult> AddTagAsync(TagCreateDto tagCreateDto)
         {
+            ValidationResult result = await _createTagValidator.ValidateAsync(tagCreateDto);
+
+            if (!result.IsValid)
+            {
+                return Results.ValidationProblem(result.ToDictionary());
+            }
+
             var fetchedTag = await _tagReadRepository.GetWhere(tag => tag.Name == tagCreateDto.Name).FirstOrDefaultAsync();
             if (fetchedTag != null)
             {
@@ -53,12 +62,20 @@ namespace off_tone.WebApi.Controllers
             }
             var tag = _mapper.Map<Tag>(tagCreateDto);
             await _tagWriteRepository.AddAsync(tag);
-            return await _tagWriteRepository.SaveAsync();
+            await _tagWriteRepository.SaveAsync();
+            return Results.Ok();
         }
 
         [HttpPut("update/{id}")]
-        public async Task<bool> UpdateTag(int id, TagUpdateDto tagUpdateDto)
+        public async Task<IResult> UpdateTag(int id, TagUpdateDto tagUpdateDto)
         {
+            ValidationResult result = await _updateTagValidator.ValidateAsync(tagUpdateDto);
+
+            if (!result.IsValid)
+            {
+                return Results.ValidationProblem(result.ToDictionary());
+            }
+
             var tag = await _tagReadRepository.GetByIdAsync(id);
 
             if (tag.TagId != id)
@@ -67,13 +84,13 @@ namespace off_tone.WebApi.Controllers
             }
 
             _mapper.Map(tagUpdateDto, tag);
-            return await _tagWriteRepository.SaveAsync();
+            await _tagWriteRepository.SaveAsync();
+            return Results.Ok();
         }
 
-        // BUG: Not working as expected.
         [HttpDelete("delete/{id}")]
         public async Task<bool> DeleteTag(int id)
-        {   // FIX: Not working
+        {
             var tag = await _tagReadRepository.GetByIdWithPostsAsync(id);
             var defaultTag = await _tagReadRepository.GetDefaultTag();
 

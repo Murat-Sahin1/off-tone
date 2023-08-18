@@ -1,11 +1,16 @@
 ﻿using FluentValidation;
 using off_tone.Application.Dtos.BlogDtos;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
 namespace off_tone.Application.Validators.Blogs
 {
-    public class CreateBlogValidator: AbstractValidator<BlogCreateDto>
+    public class UpdateBlogValidator : AbstractValidator<BlogUpdateDto>
     {
-        public CreateBlogValidator()
+        public UpdateBlogValidator()
         {
             RuleFor(b => b.BlogName)
                 .NotEmpty()

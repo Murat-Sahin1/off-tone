@@ -13,20 +13,23 @@ namespace off_tone.WebApi.Controllers
     [ApiController]
     public class BlogController : ControllerBase
     {
-        public readonly IBlogReadRepository _blogReadRepository;
-        public readonly IBlogWriteRepository _blogWriteRepository;
-        public readonly IMapper _mapper;
-        public readonly IValidator<BlogCreateDto> _createBlogValidator;
+        private readonly IBlogReadRepository _blogReadRepository;
+        private readonly IBlogWriteRepository _blogWriteRepository;
+        private readonly IMapper _mapper;
+        private readonly IValidator<BlogCreateDto> _createBlogValidator;
+        private readonly IValidator<BlogUpdateDto> _updateBlogValidator;
         public BlogController(
             IBlogWriteRepository blogWriteRepository,
             IBlogReadRepository blogReadRepository,
             IMapper mapper,
-            IValidator<BlogCreateDto> createBlogValidator
+            IValidator<BlogCreateDto> createBlogValidator,
+            IValidator<BlogUpdateDto> updateBlogValidator
             )
         {
             _blogWriteRepository = blogWriteRepository;
             _blogReadRepository = blogReadRepository;
             _createBlogValidator = createBlogValidator;
+            _updateBlogValidator = updateBlogValidator;
             _mapper = mapper;
         }
 
@@ -59,8 +62,15 @@ namespace off_tone.WebApi.Controllers
         }
 
         [HttpPut("update/{id}")]
-        public async Task<bool> UpdateBlog(int id, BlogUpdateDto blogUpdateDto)
+        public async Task<IResult> UpdateBlog(int id, BlogUpdateDto blogUpdateDto)
         {
+            ValidationResult result = await _updateBlogValidator.ValidateAsync(blogUpdateDto);
+
+            if (!result.IsValid)
+            {
+                return Results.ValidationProblem(result.ToDictionary());
+            }
+
             var blog = await _blogReadRepository.GetByIdAsync(id);
             
             if(blog.BlogId != id)
@@ -71,7 +81,7 @@ namespace off_tone.WebApi.Controllers
             _mapper.Map(blogUpdateDto, blog);
             await _blogWriteRepository.SaveAsync();
 
-            return true;
+            return Results.Ok();
         }
     }
 }
