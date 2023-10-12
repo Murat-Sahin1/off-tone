@@ -1,30 +1,26 @@
 ﻿using AuthService.Data.Identity.Contexts;
 using AuthService.Data.Identity.Entities;
-using Microsoft.AspNetCore.Identity;
+using Microsoft.Extensions.Identity.Core;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Identity;
 
 namespace AuthService.Data
 {
     public static class DbInitializer
     {
-        public static void PrepDb(IApplicationBuilder app)
+        public static async Task PrepDb(AppIdentityDbContext dbContext)
         {
-            using (var scope = app.ApplicationServices.CreateScope())
-            {
-                var dbContext = scope.ServiceProvider.GetRequiredService<AppIdentityDbContext>();
-
-                ApplyMigrations(dbContext);
-            }
+            await ApplyMigrations(dbContext);
         }
 
-        private static void ApplyMigrations(AppIdentityDbContext dbContext)
+        private static async Task ApplyMigrations(AppIdentityDbContext dbContext)
         {
             if (dbContext.Database.GetPendingMigrations().Count() > 0)
             {
                 Console.WriteLine("--> Applying new migration/s.");
                 try
                 {
-                    dbContext.Database.Migrate();
+                    await dbContext.Database.MigrateAsync();
                 }
                 catch (Exception ex)
                 {
@@ -33,18 +29,22 @@ namespace AuthService.Data
             }
         }
 
-        private static async Task SeedUsersAsync(UserManager<AppUser> userManager)
+        public static async Task SeedUsersAsync(UserManager<AppUser> userManager)
         {
             if (!userManager.Users.Any())
             {
+                Console.WriteLine("--> Seeding users.");
+
                 var user = new AppUser
                 {
                     DisplayName = "Bob",
                     Email = "adm@test.com",
                     UserName = "Bob135",
                 };
-                await userManager.CreateAsync(user, "mysecretpassword");
+                await userManager.CreateAsync(user, "Pa$$w0rd");
             }
+
         }
     }
 }
+

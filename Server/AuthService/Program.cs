@@ -22,7 +22,7 @@ builder.Services.AddIdentityCore<AppUser>(opt =>
   .AddSignInManager<SignInManager<AppUser>>();
 
 builder.Services.AddAuthentication();
-builder.Services.AddAuthorization();
+builder.Services.AddAuthorizationCore();
 
 var app = builder.Build();
 
@@ -39,6 +39,20 @@ app.UseAuthorization();
 
 app.MapControllers();
 
-DbInitializer.PrepDb(app);
+using (var scope = app.Services.CreateScope())
+{
+    var dbContext = scope.ServiceProvider.GetRequiredService<AppIdentityDbContext>();
+    var userManager = scope.ServiceProvider.GetRequiredService<UserManager<AppUser>>();
+
+    try
+    {
+        await DbInitializer.PrepDb(dbContext);
+        await DbInitializer.SeedUsersAsync(userManager);
+    }
+    catch(Exception ex)
+    {
+        Console.WriteLine($"--> An error occured during migration: {ex.Message}");
+    }
+}
 
 app.Run();
