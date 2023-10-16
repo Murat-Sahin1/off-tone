@@ -1,6 +1,7 @@
-using AuthService.Data.Dtos;
-using AuthService.Data.Identity.Entities;
 using AuthService.Features.Responses.Identity;
+using AuthService.Infrastructure.Data.Dtos;
+using AuthService.Infrastructure.Data.Identity.Entities;
+using AuthService.Infrastructure.Services.Identity.Token;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 
@@ -12,11 +13,13 @@ namespace AuthService.Controllers
     {
         private readonly UserManager<AppUser> _userManager;
         private readonly SignInManager<AppUser> _signInManager;
+        private readonly ITokenService _tokenService;
 
-        public AccountController(UserManager<AppUser> userManager, SignInManager<AppUser> signInManager)
+        public AccountController(UserManager<AppUser> userManager, SignInManager<AppUser> signInManager, ITokenService tokenService)
         {
             _userManager = userManager;
             _signInManager = signInManager;
+            _tokenService = tokenService;
         }
 
         [HttpPost("login")]
@@ -39,8 +42,8 @@ namespace AuthService.Controllers
             return new UserReadDto
             {
                 Email = user.Email,
-                Token = null,
                 DisplayName = user.DisplayName,
+                Token = _tokenService.CreateToken(user),
             };
         }
 
@@ -116,7 +119,7 @@ namespace AuthService.Controllers
             createUserResponse.Message = "User successfully created.";
             createUserResponse.Email = user.Email;
             createUserResponse.DisplayName = user.DisplayName;
-            createUserResponse.Token = null;
+            createUserResponse.Token = _tokenService.CreateToken(user);
 
             return Ok(createUserResponse);
         }

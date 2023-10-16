@@ -1,10 +1,10 @@
-﻿using AuthService.Data.Identity.Contexts;
-using AuthService.Data.Identity.Entities;
-using Microsoft.Extensions.Identity.Core;
+﻿using Microsoft.Extensions.Identity.Core;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Identity;
+using AuthService.Infrastructure.Data.Identity.Contexts;
+using AuthService.Infrastructure.Data.Identity.Entities;
 
-namespace AuthService.Data
+namespace AuthService.Infrastructure.Data
 {
     public static class DbInitializer
     {

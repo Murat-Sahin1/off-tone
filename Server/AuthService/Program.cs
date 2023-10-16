@@ -1,7 +1,7 @@
-using AuthService.Data;
-using AuthService.Data.Identity.Contexts;
-using AuthService.Data.Identity.Entities;
 using AuthService.Extensions.Identity;
+using AuthService.Infrastructure.Data;
+using AuthService.Infrastructure.Data.Identity.Contexts;
+using AuthService.Infrastructure.Data.Identity.Entities;
 using Microsoft.AspNetCore.Identity;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -15,15 +15,6 @@ builder.Services.AddSwaggerGen();
 
 builder.Services.RegisterIdentityServices(builder.Configuration);
 
-builder.Services.AddIdentityCore<AppUser>(opt =>
-{
-
-}).AddEntityFrameworkStores<AppIdentityDbContext>()
-  .AddSignInManager<SignInManager<AppUser>>();
-
-builder.Services.AddAuthentication();
-builder.Services.AddAuthorizationCore();
-
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -35,6 +26,7 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();
