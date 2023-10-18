@@ -5,5 +5,6 @@ namespace AuthService.Infrastructure.Services.Identity.Token
     public interface ITokenService
     {
         string CreateToken(AppUser user);
+        Task<bool> ValidateTokenAsync(string token);
     }
 }

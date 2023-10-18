@@ -16,7 +16,7 @@ namespace AuthService.Extensions.Identity
         {
             services.AddDbContext<AppIdentityDbContext>(opt => opt.UseNpgsql(configuration.GetConnectionString("Postgres")));
 
-            services.AddIdentity<AppUser, IdentityRole>(opt =>
+            services.AddIdentityCore<AppUser>(opt =>
             {
 
             }).AddEntityFrameworkStores<AppIdentityDbContext>()
@@ -34,10 +34,11 @@ namespace AuthService.Extensions.Identity
                         IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration["Token:Key"])),
                         ValidIssuer = configuration["Token:Issuer"],
                         ValidateIssuer = true,
+                        ValidateAudience = false
                     };
                 });
 
-            services.AddAuthorizationCore();
+            services.AddAuthorization();
 
             return services;
         }

@@ -2,12 +2,16 @@ using AuthService.Features.Responses.Identity;
 using AuthService.Infrastructure.Data.Dtos;
 using AuthService.Infrastructure.Data.Identity.Entities;
 using AuthService.Infrastructure.Services.Identity.Token;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.IdentityModel.Tokens;
+using System.IdentityModel.Tokens.Jwt;
 
 namespace AuthService.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/a/[controller]")]
     [ApiController]
     public class AccountController : ControllerBase
     {
@@ -113,6 +117,10 @@ namespace AuthService.Controllers
                     {
                         createUserResponse.ErrorList.Add(item.Description);
                     }
+                    if (item.Code == _userManager.ErrorDescriber.InvalidUserName(user.UserName).Code)
+                    {
+                        createUserResponse.ErrorList.Add(item.Description);
+                    }
                 }
                 return Ok(createUserResponse);
             }
@@ -122,6 +130,32 @@ namespace AuthService.Controllers
             createUserResponse.Token = _tokenService.CreateToken(user);
 
             return Ok(createUserResponse);
+        }
+
+        [HttpPost("validateToken")]
+        public async Task<ActionResult<ValidateTokenResponse>> ValidateTokenAsync(ValidateTokenDto validateTokenDto)
+        {
+            string jwtToken = validateTokenDto.Token;
+
+            if (jwtToken == null)
+            {
+                return BadRequest("JWT token is null.");
+            }
+
+            var isValid = await _tokenService.ValidateTokenAsync(jwtToken);
+            if (!isValid)
+            {
+                return BadRequest("Invalid Token.");
+            }
+
+            return Ok(new ValidateTokenResponse { IsValid = isValid });
+        }
+
+        [HttpPost("testAuth")]
+        [Authorize]
+        public ActionResult<string> TestingAuth(UserLoginDto loginDto)
+        {
+            return "success!";
         }
     }
 }

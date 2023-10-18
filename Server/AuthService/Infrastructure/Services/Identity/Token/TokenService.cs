@@ -1,4 +1,5 @@
 ﻿using AuthService.Infrastructure.Data.Identity.Entities;
+using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
@@ -39,6 +40,45 @@ namespace AuthService.Infrastructure.Services.Identity.Token
             var token = tokenHandler.CreateToken(tokenDescriptor);
 
             return tokenHandler.WriteToken(token);
+        }
+
+        public async Task<bool> ValidateTokenAsync(string token)
+        {
+            if (string.IsNullOrEmpty(token))
+            {
+                Console.WriteLine("Token is null or empty.");
+                return false;
+            }
+
+            var validationParameters = new TokenValidationParameters
+            {
+                ValidateIssuerSigningKey = true,
+                IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["Token:Key"])),
+                ValidateIssuer = true,
+                ValidIssuer = _configuration["Token:Issuer"],
+                ValidateAudience = false,
+                ValidateLifetime = true
+            };
+
+            try
+            {
+                var tokenHandler = new JwtSecurityTokenHandler();
+                var result = await tokenHandler.ValidateTokenAsync(token, validationParameters);
+
+                bool isValid = result.IsValid;
+
+                if (!isValid)
+                {
+                    return false;
+                }
+
+                return true;
+            }
+            catch (SecurityTokenValidationException ex)
+            {
+                Console.WriteLine(ex.Message);
+                return false;
+            }
         }
     }
 }
