@@ -1,4 +1,4 @@
-﻿namespace AuthService.Infrastructure.Data.Dtos
+﻿namespace AuthService.Infrastructure.Data.Identity.Dtos.User
 {
     public class UserReadDto
     {

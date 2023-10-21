@@ -1,13 +1,14 @@
+using AuthService.Extensions.Identity;
 using AuthService.Features.Responses.Identity;
-using AuthService.Infrastructure.Data.Dtos;
+using AuthService.Infrastructure.Data.Identity.Dtos;
+using AuthService.Infrastructure.Data.Identity.Dtos.User;
+using AuthService.Infrastructure.Data.Identity.Dtos.User.Update;
 using AuthService.Infrastructure.Data.Identity.Entities;
 using AuthService.Infrastructure.Services.Identity.Token;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.IdentityModel.Tokens;
-using System.IdentityModel.Tokens.Jwt;
+using Microsoft.EntityFrameworkCore;
 
 namespace AuthService.Controllers
 {
@@ -24,6 +25,30 @@ namespace AuthService.Controllers
             _userManager = userManager;
             _signInManager = signInManager;
             _tokenService = tokenService;
+        }
+
+        [HttpGet]
+        [Authorize]
+        public async Task<ActionResult<UserDetailsDto>> GetUserDetails()
+        {
+            var user = await _userManager.FindUserFromClaimsPrincipalByEmail(User);
+
+            if (user == null)
+            {
+                return null;
+            }
+            return new UserDetailsDto
+            {
+                Email = user.Email,
+                DisplayName = user.DisplayName,
+                UserName = user.UserName,
+            };
+        }
+
+        [HttpGet("emailExists")]
+        public async Task<ActionResult<bool>> CheckEmailExistsAsync([FromQuery] string email)
+        {
+            return await _userManager.FindByEmailAsync(email) != null;
         }
 
         [HttpPost("login")]
@@ -153,9 +178,85 @@ namespace AuthService.Controllers
 
         [HttpPost("testAuth")]
         [Authorize]
-        public ActionResult<string> TestingAuth(UserLoginDto loginDto)
+        public ActionResult<string> TestingToken(UserLoginDto loginDto)
         {
             return "success!";
+        }
+
+        [HttpPost("userName")]
+        [Authorize]
+        public async Task<ActionResult<UpdateUserNameResponse>> UpdateUserName(UpdateUserNameDto userNameDto)
+        {
+            var user = await _userManager.FindByNameAsync(userNameDto.UserName);
+
+            if(user == null)
+            {
+                return Unauthorized();
+            }
+
+            var signInResult = await _signInManager.CheckPasswordSignInAsync(user, userNameDto.Password, false);
+            
+            if(!signInResult.Succeeded)
+            {
+                return Unauthorized();
+            }
+
+            user.UserName = userNameDto.NewUserName;
+            var result = await _userManager.UpdateAsync(user);
+
+            if(!result.Succeeded)
+            {
+                return new UpdateUserNameResponse
+                {
+                    IsSuccess = false,
+                    Message = "Username couldn't be updated.",
+                };
+            }
+
+            return Ok(new UpdateUserNameResponse
+            {
+                IsSuccess = true,
+                Message = "Username is successfully updated!",
+                NewUserName = user.UserName,
+            });
+        }
+
+        [HttpPost("displayName")]
+        [Authorize]
+        public async Task<ActionResult<UpdateDisplayNameResponse>> UpdateDisplayName(UpdateDisplayNameDto displayNameDto)
+        {
+            var user = await _userManager.FindByNameAsync(displayNameDto.UserName);
+
+            if(user == null)
+            {
+                return Unauthorized();
+            }
+
+            var signInResult = await _signInManager.CheckPasswordSignInAsync(user, displayNameDto.Password, false);
+
+            if(!signInResult.Succeeded)
+            {
+                return Unauthorized();
+            }
+
+            user.DisplayName = displayNameDto.NewDisplayName;
+            var result = await _userManager.UpdateAsync(user);
+
+            if (!result.Succeeded)
+            {
+                return new UpdateDisplayNameResponse
+                {
+                    IsSuccess = false,
+                    Message = "Display name couldn't be updated.",
+                };
+            }
+
+            return Ok(new UpdateDisplayNameResponse
+            {
+                IsSuccess = true,
+                Message = "Display name is successfully updated!",
+                NewDisplayName = user.DisplayName,
+            });
         }
     }
 }
