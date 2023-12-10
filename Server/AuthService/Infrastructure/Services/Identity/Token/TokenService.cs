@@ -65,9 +65,7 @@ namespace AuthService.Infrastructure.Services.Identity.Token
                 var tokenHandler = new JwtSecurityTokenHandler();
                 var result = await tokenHandler.ValidateTokenAsync(token, validationParameters);
 
-                bool isValid = result.IsValid;
-
-                if (!isValid)
+                if (!result.IsValid)
                 {
                     return false;
                 }
