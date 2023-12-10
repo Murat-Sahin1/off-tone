@@ -2,7 +2,7 @@ using System.Text.Json;
 using AuthService.Infrastructure.Data.Event.Dtos;
 using AuthService.Infrastructure.Data.Identity.Dtos.User;
 using AuthService.Infrastructure.Data.Identity.Entities;
-using AuthService.Infrastructure.Repos;
+using AuthService.Infrastructure.Services.Identity;
 using AutoMapper;
 using Microsoft.AspNetCore.Identity;
 
@@ -54,7 +54,7 @@ namespace AuthService.EventProcessing{
             // This is a demo method to see and mind map how would login event would process
 
             using(var scope = _scopeFactory.CreateScope()){
-                var repo = scope.ServiceProvider.GetRequiredService<IAccountRepo>();
+                var repo = scope.ServiceProvider.GetRequiredService<IAccountService>();
                 var userManager = scope.ServiceProvider.GetRequiredService<UserManager<AppUser>>();
                 var signInManager = scope.ServiceProvider.GetRequiredService<SignInManager<AppUser>>();
 
