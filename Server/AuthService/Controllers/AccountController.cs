@@ -4,9 +4,8 @@ using AuthService.Infrastructure.Data.Identity.Dtos;
 using AuthService.Infrastructure.Data.Identity.Dtos.User;
 using AuthService.Infrastructure.Data.Identity.Dtos.User.Update;
 using AuthService.Infrastructure.Data.Identity.Entities;
-using AuthService.Infrastructure.Services.Identity.Token;
+using AuthService.Infrastructure.Repos;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 
 namespace AuthService.Controllers
@@ -15,66 +14,32 @@ namespace AuthService.Controllers
     [ApiController]
     public class AccountController : ControllerBase
     {
-        private readonly UserManager<AppUser> _userManager;
-        private readonly SignInManager<AppUser> _signInManager;
-        private readonly ITokenService _tokenService;
-
-        public AccountController(UserManager<AppUser> userManager, SignInManager<AppUser> signInManager, ITokenService tokenService)
+        private readonly IAccountRepo _accountRepo;
+        public AccountController(IAccountRepo accountRepo)
         {
-            _userManager = userManager;
-            _signInManager = signInManager;
-            _tokenService = tokenService;
+            _accountRepo = accountRepo;
         }
 
         [HttpGet]
         [Authorize]
-        public async Task<ActionResult<UserDetailsDto>> GetUserDetails()
+        public async Task<ActionResult<UserDetailsDto>> GetUserDetailsAsync()
         {
-            var user = await _userManager.FindUserFromClaimsPrincipalByEmail(User);
-
-            if (user == null)
-            {
-                return null;
-            }
-            return new UserDetailsDto
-            {
-                Email = user.Email,
-                DisplayName = user.DisplayName,
-                UserName = user.UserName,
-            };
+            return await _accountRepo.GetUserDetailsAsync(User);
         }
 
         [HttpGet("emailExists")]
         public async Task<ActionResult<bool>> CheckEmailExistsAsync([FromQuery] string email)
         {
-            return await _userManager.FindByEmailAsync(email) != null;
+            return await _accountRepo.CheckEmailExistsAsync(email);
         }
 
         [HttpPost("login")]
-        public async Task<ActionResult<UserReadDto>> Login(UserLoginDto loginDto)
+        public async Task<ActionResult<UserReadDto>> LoginAsync(UserLoginDto loginDto)
         {
-            var user = await _userManager.FindByEmailAsync(loginDto.Email);
-
-            if (user == null)
-            {
-                return Unauthorized();
-            }
-
-            var result = await _signInManager.CheckPasswordSignInAsync(user, loginDto.Password, false);
-
-            if (!result.Succeeded)
-            {
-                return Unauthorized();
-            }
-
-            return new UserReadDto
-            {
-                Email = user.Email,
-                DisplayName = user.DisplayName,
-                Token = _tokenService.CreateToken(user),
-            };
+            return await _accountRepo.LoginAsync(loginDto);
         }
 
+        /* 
         [HttpPost("register")]
         public async Task<ActionResult<CreateUserResponse>> Register(UserRegisterDto registerUserDto)
         {
@@ -223,6 +188,7 @@ namespace AuthService.Controllers
         [HttpPost("displayName")]
         [Authorize]
         public async Task<ActionResult<UpdateDisplayNameResponse>> UpdateDisplayName(UpdateDisplayNameDto displayNameDto)
+
         {
             var user = await _userManager.FindByNameAsync(displayNameDto.UserName);
 
@@ -257,5 +223,6 @@ namespace AuthService.Controllers
                 NewDisplayName = user.DisplayName,
             });
         }
+        */
     }
 }
