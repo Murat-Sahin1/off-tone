@@ -1,5 +1,6 @@
 ﻿using AuthService.Infrastructure.Data.Identity.Contexts;
 using AuthService.Infrastructure.Data.Identity.Entities;
+using AuthService.Infrastructure.Repos;
 using AuthService.Infrastructure.Services.Identity.Token;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
@@ -39,6 +40,7 @@ namespace AuthService.Extensions.Identity
                 });
 
             services.AddAuthorization();
+            services.AddScoped<IAccountRepo, AccountRepo>();
 
             return services;
         }
