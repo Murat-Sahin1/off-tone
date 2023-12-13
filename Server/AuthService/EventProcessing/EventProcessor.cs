@@ -1,4 +1,5 @@
 using System.Text.Json;
+using AuthService.Features.Responses.Event;
 using AuthService.Infrastructure.Data.Event.Dtos;
 using AuthService.Infrastructure.Data.Identity.Dtos.User;
 using AuthService.Infrastructure.Data.Identity.Entities;
@@ -51,36 +52,21 @@ namespace AuthService.EventProcessing{
         }
 
         private async void Login(string loginMessage){
-            // This is a demo method to see and mind map how would login event would process
-
             using(var scope = _scopeFactory.CreateScope()){
-                var repo = scope.ServiceProvider.GetRequiredService<IAccountService>();
-                var userManager = scope.ServiceProvider.GetRequiredService<UserManager<AppUser>>();
-                var signInManager = scope.ServiceProvider.GetRequiredService<SignInManager<AppUser>>();
-
-                var publishedLoginInfo = JsonSerializer.Deserialize<LoginPublishedDto>(loginMessage);
+                var accountService = scope.ServiceProvider.GetRequiredService<IAccountService>();
+                
+                var loginPublishedDto = JsonSerializer.Deserialize<LoginPublishedDto>(loginMessage);
 
                 try{
-                    var user = await userManager.FindByEmailAsync(publishedLoginInfo.Email);
-
-                    if(user == null){
-                        // TODO: Publish a new message to rabbitmq channel
-                        Console.WriteLine("--> User could not be found");
-                        return; 
+                    var userLoginDto = _mapper.Map<UserLoginDto>(loginPublishedDto);
+                    var response = await accountService.LoginAsync(userLoginDto);
+                    if(response == null){
+                        var unauthorizedEvent = _mapper.Map<UnauthorizedEvent>(loginPublishedDto);
+                        Console.WriteLine($"--> Login event is rejected, correlation id: {unauthorizedEvent.CorrelationId}");
                     }
-
-                    var result = await signInManager.CheckPasswordSignInAsync(user, publishedLoginInfo.Password, false); //this should be true
-
-                    if(!result.Succeeded){
-                        return;
-                    }
-
-                    // Create UserReadResponse and post it to rabbitmq channel
-
-                }
-                catch(Exception ex){
-                    Console.WriteLine("--> Could not login the user.");
-                    Console.WriteLine(ex.Message);
+                    // TO-DO: Logged in succesfully, publish the user details to the message bus
+                } catch(Exception ex){
+                    Console.WriteLine("--> Login operation")
                 }
             }
         }
