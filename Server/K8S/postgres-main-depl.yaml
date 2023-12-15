@@ -19,6 +19,13 @@ spec:
           ports:
             - containerPort: 5432
           env:
+          - name: POSTGRES_DB
+            value: "sampledb"
+          - name: POSTGRES_USER
+            valueFrom:
+              secretKeyRef:
+                name: postgres-main-secret
+                key: username
           - name: POSTGRES_PASSWORD
             valueFrom:
               secretKeyRef:
@@ -33,3 +40,30 @@ spec:
         - name: postgres-main-pv-storage
           persistentVolumeClaim:
             claimName: postgres-main-claim
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: postgres-main-clusterip-srv
+spec:
+  type: ClusterIP
+  selector:
+    app: postgres-main
+  ports:
+  - name: postgres-main-port
+    protocol: TCP
+    port: 5432
+    targetPort: 5432
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: postgres-main-loadbalancer
+spec:
+  type: LoadBalancer
+  selector:
+    app: postgres-main
+  port: 
+  - protocol: TCP
+    port: 5432
+    targetPort: 5432

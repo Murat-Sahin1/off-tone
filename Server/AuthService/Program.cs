@@ -1,3 +1,5 @@
+using System.ComponentModel.Design;
+using AuthService.EventProcessing;
 using AuthService.Extensions.Identity;
 using AuthService.Infrastructure.Data;
 using AuthService.Infrastructure.Data.Identity.Contexts;
@@ -13,7 +15,14 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
+// Registering Identity services
+builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 builder.Services.RegisterIdentityServices(builder.Configuration);
+
+// Event Processor
+builder.Services.AddSingleton<IEventProcessor, EventProcessor>();
+
+
 
 var app = builder.Build();
 

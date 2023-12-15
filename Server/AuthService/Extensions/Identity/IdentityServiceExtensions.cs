@@ -40,6 +40,7 @@ namespace AuthService.Extensions.Identity
                 });
 
             services.AddAuthorization();
+            
             services.AddScoped<IAccountService, AccountService>();
 
             return services;

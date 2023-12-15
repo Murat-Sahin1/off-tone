@@ -10,8 +10,8 @@ spec:
     - host: acme.com
       http:
         paths:
-          - path: /api/a/account
-            pathType: Prefix
-            backend:
-              service:
-                name: #TO-DO
+          # - path: /api/a/account
+          #  pathType: Prefix
+          #  backend:
+          #    service:
+          #      name: #TO-DO
