@@ -6,7 +6,7 @@ using AuthService.Infrastructure.Data.Identity.Dtos.User.Update;
 
 namespace AuthService.Infrastructure.Services.Identity{
     public interface IAccountService{
-        public Task<UserReadDto> LoginAsync(UserLoginDto loginDto);
+        public Task<LoginUserResponse> LoginAsync(UserLoginDto loginDto);
         public Task<UserDetailsDto> GetUserDetailsAsync(ClaimsPrincipal user);
         public Task<bool> CheckEmailExistsAsync(string email);
         public Task<CreateUserResponse> RegisterAsync(UserRegisterDto registerUserDto);

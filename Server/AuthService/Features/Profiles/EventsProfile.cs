@@ -10,6 +10,7 @@ namespace AuthService.Features.Profiles
         {
             // source --> target
             CreateMap<LoginPublishedDto, UserLoginDto>();
+            CreateMap<RegisterPublishedDto, UserRegisterDto>();
         }
     }
 }

@@ -1,7 +1,5 @@
-namespace AuthService.Features.Responses.Event
-{
-    public class UnauthorizedEvent
-    {
+namespace AuthService.Features.Responses.Event{
+    public class RegisterFailedEvent{
         public Guid CorrelationId { get; set; }
         public DateTime Timestamp { get; set; }
         public string Email { get; set; }

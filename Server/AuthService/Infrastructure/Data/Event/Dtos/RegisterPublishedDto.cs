@@ -1,6 +1,7 @@
 namespace AuthService.Infrastructure.Data.Event.Dtos{
-    public class LoginPublishedDto{
+    public class RegisterPublishedDto{
         public Guid CorrelationId { get; set; }
+        public string DisplayName { get; set; }
         public string Email { get; set; }
         public string Password { get; set; }
         public string Event { get; set; }

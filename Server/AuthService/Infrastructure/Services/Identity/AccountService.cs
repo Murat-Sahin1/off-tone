@@ -45,24 +45,32 @@ namespace AuthService.Infrastructure.Services.Identity
             };
         }
 
-        public async Task<UserReadDto> LoginAsync(UserLoginDto loginDto)
+        public async Task<LoginUserResponse> LoginAsync(UserLoginDto loginDto)
         {
             var user = await _userManager.FindByEmailAsync(loginDto.Email);
 
             if (user == null)
             {
-                return null;
+                return new LoginUserResponse{
+                    IsSucceessful = false,
+                    Message = "Login is failed."
+                };
             }
 
             var result = await _signInManager.CheckPasswordSignInAsync(user, loginDto.Password, false);
 
             if (!result.Succeeded)
             {
-                return null;
+                return new LoginUserResponse{
+                    IsSucceessful = false,
+                    Message = "Login is failed."
+                };
             }
 
-            return new UserReadDto
+            return new LoginUserResponse
             {
+                IsSucceessful = true,
+                Message = "Login is successful.",
                 Email = user.Email,
                 DisplayName = user.DisplayName,
                 Token = _tokenService.CreateToken(user),
@@ -84,7 +92,7 @@ namespace AuthService.Infrastructure.Services.Identity
             {
                 return new CreateUserResponse
                 {
-                    IsSucceeded = false,
+                    IsSuccessful = false,
                     Message = "User creation is failed.",
                     ErrorList = new List<string>(){
                         "Please use another email.",
@@ -95,7 +103,7 @@ namespace AuthService.Infrastructure.Services.Identity
             var result = await _userManager.CreateAsync(user, registerUserDto.Password);
             var createUserResponse = new CreateUserResponse
             {
-                IsSucceeded = result.Succeeded
+                IsSuccessful = result.Succeeded
             };
 
             if (!result.Succeeded)
