@@ -52,3 +52,7 @@ spec:
     protocol: TCP
     port: 15672
     targetPort: 15672
+  - name: rbmq-msg-port
+    protocol: TCP
+    port: 5672
+    targetPort: 5672

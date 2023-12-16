@@ -34,7 +34,7 @@ namespace AuthService.Controllers
         }
 
         [HttpPost("login")]
-        public async Task<ActionResult<UserReadDto>> LoginAsync(UserLoginDto loginDto)
+        public async Task<ActionResult<LoginUserResponse>> LoginAsync(UserLoginDto loginDto)
         {
             return await _accountService.LoginAsync(loginDto);
         }

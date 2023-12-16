@@ -1,4 +1,5 @@
 using System.ComponentModel.Design;
+using AuthService.AsyncDataServices;
 using AuthService.EventProcessing;
 using AuthService.Extensions.Identity;
 using AuthService.Infrastructure.Data;
@@ -20,6 +21,7 @@ builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 builder.Services.RegisterIdentityServices(builder.Configuration);
 
 // Event Processor
+builder.Services.AddHostedService<MessageBusSubscriber>();
 builder.Services.AddSingleton<IEventProcessor, EventProcessor>();
 
 

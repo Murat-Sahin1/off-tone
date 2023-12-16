@@ -30,7 +30,7 @@ spec:
             valueFrom:
               secretKeyRef:
                 name: postgres-main-secret
-                key: password
+                key: PG_PASS
           - name: PGDATA
             value: /var/lib/postgresql/data/pgdata
           volumeMounts:
