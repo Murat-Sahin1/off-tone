@@ -4,6 +4,7 @@ metadata:
   name: postgres-main-pv
   labels:
     type: local
+    app: postgres-main
 spec:
   storageClassName: manual 
   capacity:

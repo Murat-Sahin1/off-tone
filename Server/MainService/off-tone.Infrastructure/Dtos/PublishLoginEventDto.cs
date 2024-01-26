@@ -1,5 +1,7 @@
-namespace AuthService.Infrastructure.Data.Event.Dtos{
-    public class LoginPublishedDto{
+﻿namespace off_tone.Infrastructure.Dtos
+{
+    public class PublishLoginEventDto
+    {
         public string CorrelationId { get; set; }
         public string Email { get; set; }
         public string Password { get; set; }

@@ -68,6 +68,7 @@ namespace AuthService.AsyncDataServices
                 
                 var body = ea.Body;
                 var notificationMessage = Encoding.UTF8.GetString(body.ToArray());
+                Console.WriteLine(notificationMessage);
 
                 _eventProcessor.ProcessEvent(notificationMessage);
             };

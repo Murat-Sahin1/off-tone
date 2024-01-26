@@ -4,6 +4,8 @@ using off_tone.Application.Interfaces.Repositories.BlogPostRepos;
 using off_tone.Application.Interfaces.Repositories.BlogRepos;
 using off_tone.Application.Interfaces.Repositories.ReviewRepos;
 using off_tone.Application.Interfaces.Repositories.TagRepos;
+using off_tone.Infrastructure.Extensions;
+using off_tone.Persistence.Contexts;
 using off_tone.Persistence.Extensions;
 using off_tone.Persistence.Seeds;
 
@@ -18,6 +20,7 @@ builder.Services.AddSwaggerGen();
 
 builder.Services.RegisterApplicationServices();
 builder.Services.RegisterPersistenceServices(builder.Configuration);
+builder.Services.RegisterInfrastructureService();
 
 var app = builder.Build();
 
@@ -40,12 +43,16 @@ using (var scope = app.Services.CreateScope())
 
     try
     {
+        var context = services.GetService<BlogDbContext>();
+
+        await DbInitializer.MigrateDatabase(context);
+
         var blogPostWriteRepository = services.GetService<IBlogPostWriteRepository>();
         var blogWriteRepository = services.GetService<IBlogWriteRepository>();
         var tagWriteRepository = services.GetService<ITagWriteRepository>();
         var reviewWriteRepository = services.GetService<IReviewWriteRepository>();
 
-        await DbInitializer.seedBlogPosts(blogPostWriteRepository, blogWriteRepository, tagWriteRepository, reviewWriteRepository);
+        await DbInitializer.SeedBlogPosts(blogPostWriteRepository, blogWriteRepository, tagWriteRepository, reviewWriteRepository);
     }
     catch(Exception ex)
     {

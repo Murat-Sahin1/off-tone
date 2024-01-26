@@ -12,8 +12,8 @@ using off_tone.Persistence.Contexts;
 namespace off_tone.Persistence.Migrations
 {
     [DbContext(typeof(BlogDbContext))]
-    [Migration("20230724094658_mig1")]
-    partial class mig1
+    [Migration("20240126154834_InitialCreate")]
+    partial class InitialCreate
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

@@ -2,8 +2,8 @@ namespace AuthService.Features.Responses.Event
 {
     public class UnauthorizedEvent
     {
-        public Guid CorrelationId { get; set; }
-        public DateTime Timestamp { get; set; }
+        public string CorrelationId { get; set; }
+        public string Timestamp { get; set; }
         public string Email { get; set; }
         public string IPAddress { get; set; }
         public string UserAgent { get; set; }

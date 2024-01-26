@@ -1,8 +1,10 @@
-﻿using off_tone.Application.Interfaces.Repositories.BlogPostRepos;
+﻿using Microsoft.EntityFrameworkCore;
+using off_tone.Application.Interfaces.Repositories.BlogPostRepos;
 using off_tone.Application.Interfaces.Repositories.BlogRepos;
 using off_tone.Application.Interfaces.Repositories.ReviewRepos;
 using off_tone.Application.Interfaces.Repositories.TagRepos;
 using off_tone.Domain.Entities;
+using off_tone.Persistence.Contexts;
 using off_tone.Persistence.Repositories.BlogRepos;
 using System.Reflection.Metadata;
 
@@ -10,7 +12,27 @@ namespace off_tone.Persistence.Seeds
 {
     public static class DbInitializer
     {
-        public static async Task<bool> seedBlogPosts(IBlogPostWriteRepository blogPostWriteRepository, IBlogWriteRepository blogWriteRepository, ITagWriteRepository tagWriteRepository, IReviewWriteRepository reviewWriteRepository)
+        public static async Task<bool> MigrateDatabase(BlogDbContext context)
+        {
+            
+            if (context == null)
+            {
+                return false;
+            }
+
+            try
+            {
+                Console.WriteLine("--> Attempting to apply migrations...");
+                await context.Database.MigrateAsync();
+            } catch(Exception ex)
+            {
+                Console.WriteLine(ex.ToString());
+                return false;
+            }
+
+            return true;
+        }
+        public static async Task<bool> SeedBlogPosts(IBlogPostWriteRepository blogPostWriteRepository, IBlogWriteRepository blogWriteRepository, ITagWriteRepository tagWriteRepository, IReviewWriteRepository reviewWriteRepository)
         {
 
             if (blogPostWriteRepository.AnyElements())

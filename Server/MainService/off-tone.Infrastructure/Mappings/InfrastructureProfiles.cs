@@ -1,6 +1,14 @@
-﻿namespace off_tone.Infrastructure.Mappings;
+﻿using AutoMapper;
+using off_tone.Infrastructure.Dtos;
+using off_tone.Application.Dtos.IdentityDtos.User;
 
-public class InfrastructureProfiles
+namespace off_tone.Infrastructure.Mappings;
+
+public class InfrastructureProfiles : Profile
 {
-    
+    public InfrastructureProfiles()
+    {
+        // Source ---> Target
+        CreateMap<UserLoginDto, PublishLoginEventDto>();
+    }
 }

@@ -72,7 +72,7 @@ namespace AuthService.EventProcessing
                         var unauthorizedEvent = new UnauthorizedEvent
                         {
                             CorrelationId = loginPublishedDto.CorrelationId,
-                            Timestamp = DateTime.Now.Date,
+                            Timestamp = DateTime.Now.Date.ToString(),
                             Email = loginPublishedDto.Email,
                             IPAddress = loginPublishedDto.IPAddress,
                             UserAgent = loginPublishedDto.UserAgent,
@@ -89,7 +89,7 @@ namespace AuthService.EventProcessing
                     var successfulLoginEvent = new SuccessfulLoginEvent
                     {
                         CorrelationId = loginPublishedDto.CorrelationId,
-                        Timestamp = DateTime.Now.Date,
+                        Timestamp = DateTime.Now.Date.ToString(),
                         Email = userLoginDto.Email,
                         IPAddress = loginPublishedDto.IPAddress,
                         UserAgent = loginPublishedDto.UserAgent,

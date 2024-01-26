@@ -18,26 +18,14 @@ spec:
           imagePullPolicy: IfNotPresent
           ports:
             - containerPort: 5432
-          env:
-          - name: POSTGRES_DB
-            value: "sampledb"
-          - name: POSTGRES_USER
-            valueFrom:
-              secretKeyRef:
-                name: postgres-main-secret
-                key: username
-          - name: POSTGRES_PASSWORD
-            valueFrom:
-              secretKeyRef:
-                name: postgres-main-secret
-                key: PG_PASS
-          - name: PGDATA
-            value: /var/lib/postgresql/data/pgdata
+          envFrom:
+          - configMapRef:
+              name: postgres-config
           volumeMounts:
-          - mountPath: /var/lib/postgresql/data
-            name: postgres-main-pv-storage
+          - mountPath: /var/lib/postgresqlmain/data
+            name: postgredb
       volumes: 
-        - name: postgres-main-pv-storage
+        - name: postgredb
           persistentVolumeClaim:
             claimName: postgres-main-claim
 ---
@@ -50,7 +38,7 @@ spec:
   selector:
     app: postgres-main
   ports:
-  - name: postgres-main-port
+  - name: postgres-main
     protocol: TCP
     port: 5432
     targetPort: 5432
@@ -63,7 +51,7 @@ spec:
   type: LoadBalancer
   selector:
     app: postgres-main
-  port: 
+  ports: 
   - protocol: TCP
     port: 5432
     targetPort: 5432
