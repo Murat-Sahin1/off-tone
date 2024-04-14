@@ -11,7 +11,7 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-var currentDb =  builder.Services.RegisterDbContext(builder.Environment);
+var currentDb =  builder.Services.RegisterDbContext(builder.Environment, builder.Configuration);
 Console.WriteLine("--> Current Db: " + currentDb);
 
 var app = builder.Build();

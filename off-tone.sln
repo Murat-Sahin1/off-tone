@@ -12,6 +12,9 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Integration", "Integration", "{66D724DB-C1B7-4531-A3D9-174E97F75553}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "BlogService", "BlogService", "{255902CE-AC18-4AE3-80CF-13CF73BC536B}"
+	ProjectSection(SolutionItems) = preProject
+		Services\BlogService\Dockerfile = Services\BlogService\Dockerfile
+	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Core", "Core", "{2082B1DB-54D2-4E8D-8E8A-2F4423F5395F}"
 EndProject

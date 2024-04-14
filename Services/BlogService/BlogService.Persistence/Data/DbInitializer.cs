@@ -54,6 +54,7 @@ public static class DbInitializer
             return true;
         }
         
+        Console.WriteLine("--> Seeding is started.");
         bool isSuccess = false;
         try
         {

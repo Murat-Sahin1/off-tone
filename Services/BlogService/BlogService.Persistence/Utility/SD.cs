@@ -2,7 +2,7 @@
 
 public static class SD
 {
-    public static bool IsProd = false;
+    public static bool IsProd = true;
     public enum CurrentDB
     {
         PostgreSQL,
